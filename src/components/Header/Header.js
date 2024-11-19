@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import HeaderButton from "../Button/HeaderButton/HeaderButton";
+import HeaderButton from "../Button/HeaderButton";
 import colors from "../../constants/Colors/Colors";
 
 export default function Header({ titleHeader }) {

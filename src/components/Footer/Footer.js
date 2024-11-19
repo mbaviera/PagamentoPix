@@ -1,12 +1,11 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import HeaderButton from "../Button/HeaderButton/HeaderButton";
 import colors from "../../constants/Colors/Colors";
 
-export default function Footer({ valor, buttonDisabled }) {
+export default function Footer({ valor, buttonDisabled, buttonText }) {
   return (
     <View style={styles.footerContainer}>
-      <View style={{ flexDirection: "column" }}>        
+      <View style={{ flexDirection: "column" }}>
         <Text
           style={{
             marginBottom: 2,
@@ -34,7 +33,7 @@ export default function Footer({ valor, buttonDisabled }) {
           disabled={buttonDisabled}
         >
           <Text style={{ textAlign: "center", color: colors.white }}>
-            Pagar
+            {buttonText}
           </Text>
         </TouchableOpacity>
       </View>
@@ -44,16 +43,15 @@ export default function Footer({ valor, buttonDisabled }) {
 
 const styles = StyleSheet.create({
   footerContainer: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
+    padding: 10,
+    justifyContent: "center",
+    alignItems: "center",
     backgroundColor: colors.white,
     justifyContent: "space-between",
     flexDirection: "row",
     paddingHorizontal: 16,
     paddingVertical: 16,
-    elevation: 20
+    elevation: 20,
   },
   payButton: {
     paddingHorizontal: 16,

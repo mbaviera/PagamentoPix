@@ -1,11 +1,11 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
-import colors from "../../../constants/Colors/Colors";
+import colors from "../../constants/Colors/Colors";
 
-export default function HeaderButton({ iconName, iconSize, iconColor }) {
+export default function HeaderButton({ iconName, iconSize, iconColor, onPress }) {
   return (
-    <TouchableOpacity style={styles.buttonContainer}>
+    <TouchableOpacity style={styles.buttonContainer} onPress={onPress}>
       <Icon name={iconName} size={iconSize} color={iconColor} />
     </TouchableOpacity>
   );

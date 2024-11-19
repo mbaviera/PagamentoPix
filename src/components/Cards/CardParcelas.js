@@ -1,10 +1,15 @@
 import React, { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import RadioButton from "../../RadioButton/RadioButton";
-import colors from "../../../constants/Colors/Colors";
+import RadioButton from "../RadioButton/RadioButton";
+import colors from "../../constants/Colors/Colors";
 
-export default function CardMenu({ title, subtitle, onSelect, option }) {
-  const [userOption, setUserOption] = useState('Saldo em conta');
+export default function CardParcelas({
+  installments,
+  installmentAmount,
+  onSelect,
+  option,
+}) {
+  const [userOption, setUserOption] = useState(1);
 
   const selectHandler = (value) => {
     /* console.log('value: ', value);
@@ -15,22 +20,19 @@ export default function CardMenu({ title, subtitle, onSelect, option }) {
 
   return (
     <View style={styles.cardContainer}>
-      <View style={styles.radioContainer}>
-        <View style={styles.containerButton}>
-          <Pressable
-            style={
-                title === option ? styles.selected : styles.unselected
-            }
-            onPress={() => selectHandler(title)}
-          >
-            {/* <Text style={styles.option}>{item.value}</Text> */}
-          </Pressable>
-        </View>
+      <View style={styles.containerButton}>
+        <Pressable
+          style={installments === option ? styles.selected : styles.unselected}
+          onPress={() => selectHandler(installments)}
+        >
+          {/* <Text style={styles.option}>{item.value}</Text> */}
+        </Pressable>
       </View>
 
       <View style={styles.textContainer}>
-        <Text style={styles.titleStyle}>{title}</Text>
-        <Text style={styles.subtitleStyle}>{subtitle}</Text>
+        <Text
+          style={styles.titleStyle}
+        >{`${installments} x ${installmentAmount}`}</Text>
       </View>
     </View>
   );
@@ -44,12 +46,10 @@ const styles = StyleSheet.create({
     paddingRight: 8,
     backgroundColor: colors.white,
     borderRadius: 6,
-    elevation: 6,
-    marginTop: 8
-  },
-  radioContainer: {
-    alignItems: "center",
-    justifyContent: "center",
+    elevation: 2,
+    marginTop: 8,
+    marginHorizontal: 16,
+    alignItems: 'center'
   },
   textContainer: {
     flexDirection: "column",
@@ -62,14 +62,6 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     backgroundColor: colors.white,
   },
-  subtitleStyle: {
-    color: colors.grey700,
-    fontSize: 12,
-    fontFamily: "Montserrat-Regular",
-    lineHeight: 20,
-    backgroundColor: colors.white,
-  },
-
   containerButton: {
     borderColor: colors.main700,
     borderRadius: 50,
@@ -78,11 +70,7 @@ const styles = StyleSheet.create({
     height: 28,
     justifyContent: "center",
     alignItems: "center",
-  },
-  option: {
-    fontSize: 20,
-    color: "white",
-    textAlign: "center",
+    backgroundColor: "red",
   },
   unselected: {
     width: 24,
