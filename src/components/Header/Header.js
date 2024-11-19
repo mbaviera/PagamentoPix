@@ -13,18 +13,7 @@ export default function Header({ titleHeader }) {
           iconColor={colors.main800}
         />
       </View>
-
-      <Text
-        style={{
-          color: colors.grey800,
-          fontSize: 24,
-          fontFamily: "Montserrat-Bold",
-          lineHeight: 28,
-          backgroundColor: colors.grey100,
-        }}
-      >
-        Transferência Pix
-      </Text>
+      <Text style={styles.textTitle}>{`${titleHeader}`}</Text>
     </View>
   );
 }
@@ -41,6 +30,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     height: 32,
     marginBottom: 24,
+    backgroundColor: colors.grey100,
+  },
+  textTitle: {
+    color: colors.grey800,
+    fontSize: 24,
+    fontFamily: "Montserrat-Bold",
+    lineHeight: 28,
     backgroundColor: colors.grey100,
   },
 });

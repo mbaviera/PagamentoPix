@@ -6,20 +6,8 @@ export default function Footer({ valor, buttonDisabled, buttonText }) {
   return (
     <View style={styles.footerContainer}>
       <View style={{ flexDirection: "column" }}>
-        <Text
-          style={{
-            marginBottom: 2,
-            fontVariant: "Montserrat-Regular",
-            fontSize: 14,
-          }}
-        >
-          Valor a ser pago
-        </Text>
-        <Text
-          style={{ marginTop: 2, fontVariant: "Montserrat-Bold", fontSize: 18 }}
-        >
-          R$ {valor}
-        </Text>
+        <Text style={styles.textTitle}>{`Valor a ser pago`}</Text>
+        <Text style={styles.textSubtitle}>{`R$ ${valor}`}</Text>
       </View>
 
       <View style={{ justifyContent: "center" }}>
@@ -32,9 +20,7 @@ export default function Footer({ valor, buttonDisabled, buttonText }) {
           ]}
           disabled={buttonDisabled}
         >
-          <Text style={{ textAlign: "center", color: colors.white }}>
-            {buttonText}
-          </Text>
+          <Text style={styles.textButtonContinuar}>{`${buttonText}`}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -58,5 +44,19 @@ const styles = StyleSheet.create({
     paddingTop: 7,
     paddingBottom: 8,
     borderRadius: 100,
+  },
+  textTitle: {
+    marginBottom: 2,
+    fontVariant: "Montserrat-Regular",
+    fontSize: 14,
+  },
+  textSubtitle: {
+    marginTop: 2,
+    fontVariant: "Montserrat-Bold",
+    fontSize: 18,
+  },
+  textButtonContinuar: {
+    textAlign: "center",
+    color: colors.white,
   },
 });

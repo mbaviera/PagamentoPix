@@ -59,27 +59,9 @@ export default function Payment({ navigation }) {
         visible={modalVisible}
         onRequestClose={() => handleShowModal(false)}
       >
-        <SafeAreaView
-          style={{
-            flex: 1,
-            backgroundColor: colors.white,
-            marginTop: 80,
-            elevation: 5,
-            borderTopLeftRadius: 12,
-            borderTopRightRadius: 12,
-          }}
-        >
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 16,
-              justifyContent: "space-between",
-              paddingTop: 8,
-              paddingBottom: 16,
-              marginTop: 25,
-            }}
-          >
-            <Text style={{ fontSize: 24 }}>Parcelas do pagamento</Text>
+        <SafeAreaView style={styles.safeContainerModal}>
+          <View style={styles.headerModalContainer}>
+            <Text style={styles.textTitleModal}>Parcelas do pagamento</Text>
             <RoundedButton
               iconName={"close"}
               iconSize={24}
@@ -88,20 +70,14 @@ export default function Payment({ navigation }) {
             />
           </View>
 
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 16,
-              justifyContent: "space-between",
-              paddingBottom: 16,
-            }}
-          >
-            <Text>
+          <View style={styles.subTitleModalContainer}>
+            <Text style={styles.textSubtitleModal}>
               O destinatário receberá a vista e você pagara parcelado.
             </Text>
           </View>
+
           <ScrollView contentContainerStyle={styles.scrollView} bounces={false}>
-            {paymentSimulationItems.map((item) => (
+            {paymentSimulationItems?.map((item) => (
               <CardParcelas
                 installments={item.installments}
                 installmentAmount={item.installmentAmount}
@@ -112,18 +88,16 @@ export default function Payment({ navigation }) {
               />
             ))}
           </ScrollView>
-          <Footer
-            valor={100.0}
-            buttonText={"Continuar"}
-          />
+          <Footer valor={100.0} buttonText={"Continuar"} />
         </SafeAreaView>
       </Modal>
     );
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.grey100 }}>
-      <Header />
+    <SafeAreaView style={styles.container}>
+      {renderModalParcelas()}
+      <Header titleHeader={"Transferência Pix"} />
       <View style={styles.textContainer}>
         <Text style={styles.paymentSubtitle}>
           Escolha uma forma de pagamento
@@ -133,7 +107,7 @@ export default function Payment({ navigation }) {
       <ScrollView contentContainerStyle={styles.scrollView} bounces={false}>
         <View style={styles.textContainer}>
           <Text style={styles.textConta}>Conta Midway</Text>
-          {userAccount.map((item) => (
+          {userAccount?.map((item) => (
             <CardMenu
               key={item.accountId}
               title={"Saldo em conta"}
@@ -146,7 +120,7 @@ export default function Payment({ navigation }) {
 
         <View style={styles.textContainer}>
           <Text style={styles.textCartoes}>Cartões de Crédito</Text>
-          {userCards.map((item) => (
+          {userCards?.map((item) => (
             <View key={item.name}>
               <CardMenu
                 title={item.name}
@@ -168,8 +142,7 @@ export default function Payment({ navigation }) {
             </View>
           ))}
         </View>
-      </ScrollView>
-      {renderModalParcelas()}
+      </ScrollView>      
       <Footer
         valor={100.0}
         buttonDisabled={buttonDisabled}
@@ -180,6 +153,10 @@ export default function Payment({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1, 
+    backgroundColor: colors.grey100
+  },
   textContainer: {
     paddingHorizontal: 16,
     paddingTop: 8,
@@ -225,55 +202,40 @@ const styles = StyleSheet.create({
     fontFamily: "Montserrat-Semibold",
     lineHeight: 20,
   },
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100%",
-    marginTop: 80,
-    backgroundColor: colors.white,
-  },
-  modalView: {
-    borderRadius: 20,
-    paddingBottom: 100,
-    elevation: 5,
-    width: "100%",
-    backgroundColor: colors.white,
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
-  },
-  buttonClose: {
-    backgroundColor: "#2196F3",
-  },
-  textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center",
-  },
-  modalScrollView: {
-    flexGrow: 1,
-    borderColor: "red",
-    borderWidth: 2,
-  },
   scrollView: {
     flexGrow: 1,
-  },
-  paragraph: {
-    padding: 1,
   },
   footer: {
     padding: 10,
     justifyContent: "center",
     alignItems: "center",
   },
+  safeContainerModal: {
+    flex: 1,
+    backgroundColor: colors.white,
+    marginTop: 80,
+    elevation: 5,
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+  },
+  headerModalContainer: {
+    flexDirection: "row",
+    paddingHorizontal: 16,
+    justifyContent: "space-between",
+    paddingTop: 8,
+    paddingBottom: 16,
+    marginTop: 25,
+  },
+  textTitleModal: {
+    fontSize: 24,
+  },
+  subTitleModalContainer: {
+    flexDirection: "row",
+    paddingHorizontal: 16,
+    justifyContent: "space-between",
+    paddingBottom: 16,
+  },
+  textSubtitleModal: {
+    fontSize: 16
+  }
 });

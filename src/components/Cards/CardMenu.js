@@ -20,8 +20,8 @@ export default function CardMenu({ title, subtitle, onSelect, option }) {
       </View>
 
       <View style={styles.textContainer}>
-        <Text style={styles.titleStyle}>{title}</Text>
-        <Text style={styles.subtitleStyle}>{subtitle}</Text>
+        <Text style={styles.titleStyle}>{`${title}`}</Text>
+        <Text style={styles.subtitleStyle}>{`${subtitle}`}</Text>
       </View>
     </View>
   );
@@ -57,7 +57,6 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     backgroundColor: colors.white,
   },
-
   containerButton: {
     borderColor: colors.main700,
     borderRadius: 50,
@@ -66,11 +65,6 @@ const styles = StyleSheet.create({
     height: 28,
     justifyContent: "center",
     alignItems: "center",
-  },
-  option: {
-    fontSize: 20,
-    color: "white",
-    textAlign: "center",
   },
   unselected: {
     width: 24,

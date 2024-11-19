@@ -11,8 +11,6 @@ export default function CardParcelas({
   const [userOption, setUserOption] = useState(1);
 
   const selectHandler = (value) => {
-    /* console.log('value: ', value);
-    console.log('title: ', title); */
     onSelect(value);
     setUserOption(value);
   };
