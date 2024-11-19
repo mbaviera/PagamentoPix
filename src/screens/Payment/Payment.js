@@ -19,7 +19,7 @@ import {
 import Footer from "../../components/Footer/Footer";
 import Icon from "react-native-vector-icons/FontAwesome";
 import CardParcelas from "../../components/Cards/CardParcelas";
-import HeaderButton from "../../components/Button/HeaderButton";
+import RoundedButton from "../../components/Button/RoundedButton";
 
 export default function Payment({ navigation }) {
   const [userAccount, setUserAccount] = useState(getUserAccount());
@@ -80,7 +80,7 @@ export default function Payment({ navigation }) {
             }}
           >
             <Text style={{ fontSize: 24 }}>Parcelas do pagamento</Text>
-            <HeaderButton
+            <RoundedButton
               iconName={"close"}
               iconSize={24}
               iconColor={colors.main800}

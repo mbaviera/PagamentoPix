@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import RadioButton from "../RadioButton/RadioButton";
 import colors from "../../constants/Colors/Colors";
 
 export default function CardParcelas({

@@ -1,13 +1,13 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import HeaderButton from "../Button/HeaderButton";
+import RoundedButton from "../Button/RoundedButton";
 import colors from "../../constants/Colors/Colors";
 
 export default function Header({ titleHeader }) {
   return (
     <View style={styles.headerContainer}>
       <View style={styles.contentArea}>
-        <HeaderButton
+        <RoundedButton
           iconName="chevron-left"
           iconSize={20}
           iconColor={colors.main800}
