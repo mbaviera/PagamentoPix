@@ -11,9 +11,8 @@ export default function Navigation() {
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName="Payment"
-        screenOptions={{ headerShown: false, animationTypeForReplace: false }}
       >
-        <Stack.Screen name="Payment" component={Payment} />
+        <Stack.Screen name="Payment" component={Payment} options={{headerShown: false}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
