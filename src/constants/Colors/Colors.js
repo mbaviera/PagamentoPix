@@ -13,7 +13,8 @@ const colors = {
     lightBlack: '#252525',
     red: '#E30E17',
     orange: '#EA600A',
-    yellow: '#F59F00'
+    yellow: '#F59F00',
+    grey: '#9D9B9B'
 };
 
 export default colors;

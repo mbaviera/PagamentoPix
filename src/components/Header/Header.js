@@ -1,8 +1,7 @@
 import React from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import HeaderButton from "../Button/HeaderButton/HeaderButton";
 import colors from "../../constants/Colors/Colors";
-import Text from "../Text/Text";
 
 export default function Header({ titleHeader }) {
   return (
@@ -10,20 +9,22 @@ export default function Header({ titleHeader }) {
       <View style={styles.contentArea}>
         <HeaderButton
           iconName="chevron-left"
-          iconSize={24}
+          iconSize={20}
           iconColor={colors.main800}
         />
       </View>
 
       <Text
-        titulo='Transferencias'
-        color={colors.grey800}
-        size={24}
-        fontFamily='Montserrat-Regular'
-        lineHeight={28}
-        fontWeight={600}
-        backgroundColor={colors.grey100}
-      />
+        style={{
+          color: colors.grey800,
+          fontSize: 24,
+          fontFamily: "Montserrat-Bold",
+          lineHeight: 28,
+          backgroundColor: colors.grey100,
+        }}
+      >
+        Transferência Pix
+      </Text>
     </View>
   );
 }
