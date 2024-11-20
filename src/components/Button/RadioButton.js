@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, Pressable, StyleSheet } from "react-native";
-import colors from "../../constants/Colors/Colors";
+import colors from "../../constants/Colors";
 
 export default function RadioButton({ data, onSelect }) {
   const [userOption, setUserOption] = useState(null);

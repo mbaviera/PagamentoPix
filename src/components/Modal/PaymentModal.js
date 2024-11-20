@@ -7,7 +7,7 @@ import {
   ScrollView,
   View,
 } from "react-native";
-import colors from "../../constants/Colors/Colors";
+import colors from "../../constants/Colors";
 import CardParcelas from "../Cards/CardParcelas";
 import Footer from "../Footer/Footer";
 import RoundedButton from "../Button/RoundedButton";

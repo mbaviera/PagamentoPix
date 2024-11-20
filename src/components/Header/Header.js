@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import RoundedButton from "../Button/RoundedButton";
-import colors from "../../constants/Colors/Colors";
+import colors from "../../constants/Colors";
 
 const Header = ({ titleHeader }) => {
   return (

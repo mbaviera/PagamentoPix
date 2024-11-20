@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Header from "../../components/Header/Header";
-import colors from "../../constants/Colors/Colors";
+import colors from "../../constants/Colors";
 import CardMenu from "../../components/Cards/CardMenu";
 import {
   getUserAccount,
@@ -21,6 +21,7 @@ import Footer from "../../components/Footer/Footer";
 import Icon from "react-native-vector-icons/FontAwesome";
 import PaymentModal from "../../components/Modal/PaymentModal";
 import Loading from "../../components/Loading/Loading";
+import consts from "../../constants/Consts";
 
 const Payment = ({ navigation }) => {
   const paymentInitialData = getPaymentInitialData();
@@ -29,25 +30,27 @@ const Payment = ({ navigation }) => {
   const [paymentInfo, setPaymentInfo] = useState(); //informacoes do pagamento do pix
   const [paymentSimulationItems, setPaymentSimulationItems] = useState(); //informacoes do simulacao do pagamento do pix
 
-  const [cardFee, setCardFee] = useState(); //taxa do cartao de credito
-  const [installmentsFee, setInstallmentsFee] = useState(); //taxa das parcelas
-
   const [paymentAmount, setPaymentAmount] = useState(paymentInitialData.amount); //valor total sem taxas
   const [receiverName, setReceiverName] = useState(paymentInitialData.name); //nome de quem esta recebendo o pix
   const [amountToPay, setAmountToPay] = useState(
     `R$ ${paymentAmount?.toFixed(2)}`
-  ); //valor a pagar (installments x installmentAmount)
-  const [installments, setInstallments] = useState(); //parcelas (installments)
-  const [installmentAmount, setInstallmentAmount] = useState(); //valor das parcelas (installmentAmount)
+  ); //valor a pagar
+  const [totalAmountToPay, setTotalAmountToPay] = useState(
+    `R$ ${paymentAmount?.toFixed(2)}`
+  );
 
-  const [cardInstallments, setCardInstallments] = useState(`Escolher Parcelas`); //card exibido ao selecionar algum cartao de credito
-  const [radioButtonMenu, setRadioButtonMenu] = useState("Saldo em conta"); //radio button do menu principal
-  const [radioButtonInstallments, setRadioButtonInstallments] = useState(); //controaldor de qual radio button do modal sera marcado
+  const [cardInstallments, setCardInstallments] = useState(
+    consts.escolherParcelas
+  ); //card exibido ao selecionar algum cartao de credito
+  const [radioMenu, setRadioMenu] = useState(consts.saldoEmConta); //radio button do menu principal
+  const [radioInstallments, setRadioInstallments] = useState(); //radio button das parcelas
+  const [radioInstallmentsController, setRadioInstallmentsController] =
+    useState(); //controaldor de radio button das parcelas
 
   const [buttonDisabled, setButtonDisabled] = useState(false); //habilitacao do botao de pagar/continuar
   const [modalVisible, setModalVisible] = useState(false); //modal com a lista das parcelas do pagamento
   const [showCheckCard, setShowCheckCard] = useState(false); //card com as informacoes finais do pagamento com cartao de credito
-  const [processPayment, setProcessPayment] = useState(false);//chamar o loading no processo de pagamento 
+  const [processPayment, setProcessPayment] = useState(false); //chamar o loading no processo de pagamento
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,54 +65,45 @@ const Payment = ({ navigation }) => {
         setPaymentInfo(paymentInfoData);
         setPaymentSimulationItems(simulationData);
       } catch (error) {
-        console.error("Erro ao buscar dados:", error);
+        console.error(consts.erroBuscarDados, error);
       }
     };
-
     fetchData();
   }, []);
 
   //funcao de controle do click nos botoes radio da tela de menu
   const handleMenuSelection = (value, buttonDisabled) => {
-    setRadioButtonMenu(value);
+    setRadioMenu(value);
     setButtonDisabled(buttonDisabled);
-    setShowCheckCard(false);
+    setDataToInitialValue();
   };
 
   //funcao de controle do click nos botoes radio das parcelas de pagamento
   const handleInstallmentsSelection = (value, buttonDisabled, item) => {
-    setRadioButtonInstallments(value);
+    setRadioInstallments(value);
     setButtonDisabled(buttonDisabled);
-    updateInstallmentInfo(item.installments, item.installmentAmount, item.fees);
+    setAmountToPay(
+      `${item.installments}x de R$ ${item.installmentAmount.toFixed(2)}`
+    );
   };
 
-  //funcao de atualizar os dados referente ao pagamento por parcelas
-  const updateInstallmentInfo = (installments, installmentAmount, fees) => {
-    setInstallmentAmount(installmentAmount);
-    setAmountToPay(`${installments}x de R$ ${installmentAmount.toFixed(2)}`);
-    setInstallments(installments);
-    setCardFee(fees.fixedAmount);
-    setInstallmentsFee(fees.installmentAmount);
-  };
-
-  //funcao de controle para mostrar o modal com as parcelas de pagamento
-  const openPaymentModal = (modalVisible) => {
-    setModalVisible(modalVisible);
-    setButtonDisabled(true);
-  };
-
-  //funcao de controle para fechar o modal com as parcelas de pagamento
-  const closePaymentModal = () => {
-    setRadioButtonInstallments();
-    setAmountToPay(`R$ ${paymentAmount.toFixed(2)}`);
-    setModalVisible(false);
-    setButtonDisabled(true);
+  //funcao de setar os controles para os valores iniciais
+  const setDataToInitialValue = () => {
+    setShowCheckCard(false); //
+    setCardInstallments(consts.escolherParcelas);
+    setAmountToPay(`R$ ${paymentAmount?.toFixed(2)}`);
+    setTotalAmountToPay(`R$ ${paymentAmount?.toFixed(2)}`);
+    setRadioInstallments();
+    setRadioInstallmentsController();
   };
 
   //funcao de controle do botao de continuar dentro do modal com as listas de parcelas
   const handleContinueButton = () => {
+    console.log("amountToPay: ", amountToPay);
     setShowCheckCard(true);
     setCardInstallments(amountToPay);
+    setTotalAmountToPay(amountToPay);
+    setRadioInstallmentsController(radioInstallments);
     setModalVisible(false);
   };
 
@@ -123,14 +117,33 @@ const Payment = ({ navigation }) => {
     }, 1000);
   };
 
-  //estado de erro pra carregar os dados da conta do usuario 
+  //funcao de controle para mostrar o modal com as parcelas de pagamento
+  const openPaymentModal = (modalVisible) => {
+    setRadioInstallments(radioInstallmentsController);
+    setModalVisible(modalVisible);
+    if (!showCheckCard) {
+      setButtonDisabled(true);
+    }
+  };
+
+  //funcao de controle para fechar o modal com as parcelas de pagamento
+  const closePaymentModal = () => {
+    setModalVisible(false);
+    if (!showCheckCard) {
+      setAmountToPay(`R$ ${paymentAmount.toFixed(2)}`);
+      setButtonDisabled(true);
+      setRadioInstallments();
+    }
+  };
+
+  //estado de erro pra carregar os dados da conta do usuario
   if (!userAccount) {
-    return <Loading text={"Carregando dados da conta..."} />;
+    return <Loading text={consts.carregandoDados} />;
   }
 
   //loading pra exibir durante o processo de pagamento
   if (processPayment) {
-    return <Loading text={"Processando sua transferência"} />;
+    return <Loading text={consts.processandoTransferencia} />;
   }
 
   //funcao de exibir o componente modal com as parcelas
@@ -144,7 +157,7 @@ const Payment = ({ navigation }) => {
         amountToPay={amountToPay}
         buttonDisabled={buttonDisabled}
         onContinue={handleContinueButton}
-        radioButtonInstallments={radioButtonInstallments}
+        radioButtonInstallments={radioInstallments}
       />
     );
   };
@@ -165,10 +178,10 @@ const Payment = ({ navigation }) => {
           {userAccount?.map((item) => (
             <CardMenu
               key={item.accountId}
-              title={"Saldo em conta"}
+              title={consts.saldoEmConta}
               subtitle={`Disponível R$ ${item.balance}`}
               onSelect={(value) => handleMenuSelection(value, false)}
-              option={radioButtonMenu}
+              option={radioMenu}
             />
           ))}
         </View>
@@ -181,9 +194,9 @@ const Payment = ({ navigation }) => {
                 title={item.name}
                 subtitle={item.cardNumber}
                 onSelect={(value) => handleMenuSelection(value, true)}
-                option={radioButtonMenu}
+                option={radioMenu}
               />
-              {radioButtonMenu === item.name ? (
+              {radioMenu === item.name ? (
                 <>
                   <TouchableOpacity
                     style={styles.parcelasContainer}
@@ -200,41 +213,21 @@ const Payment = ({ navigation }) => {
                   </TouchableOpacity>
                   {showCheckCard ? (
                     <View style={styles.checkContainer}>
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          justifyContent: "space-between",
-                        }}
-                      >
+                      <View style={styles.checkRow}>
                         <Text>Valor a transferir</Text>
                         <Text>{`R$ ${paymentAmount?.toFixed(2)}`}</Text>
                       </View>
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          justifyContent: "space-between",
-                        }}
-                      >
+                      <View style={styles.checkRow}>
                         <Text>Taxa do cartão</Text>
                         <Text>100</Text>
                       </View>
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          justifyContent: "space-between",
-                        }}
-                      >
+                      <View style={styles.checkRow}>
                         <Text>Taxa de parcelamento</Text>
                         <Text>-</Text>
                       </View>
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          justifyContent: "space-between",
-                        }}
-                      >
+                      <View style={styles.checkRow}>
                         <Text>Valor a transferir + taxas</Text>
-                        <Text>{amountToPay}</Text>
+                        <Text>{totalAmountToPay}</Text>
                       </View>
                     </View>
                   ) : null}
@@ -245,7 +238,7 @@ const Payment = ({ navigation }) => {
         </View>
       </ScrollView>
       <Footer
-        valor={amountToPay}
+        valor={totalAmountToPay}
         buttonDisabled={buttonDisabled}
         buttonText={"Pagar"}
         onPress={() => handlePaymentProcess()}
@@ -317,6 +310,10 @@ const styles = StyleSheet.create({
     padding: 10,
     justifyContent: "center",
     alignItems: "center",
+  },
+  checkRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 });
 

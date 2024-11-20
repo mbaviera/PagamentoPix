@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import colors from "../../constants/Colors/Colors";
+import colors from "../../constants/Colors";
 
 const CardMenu = ({ title, subtitle, onSelect, option }) => {
   const [userOption, setUserOption] = useState("Saldo em conta");
