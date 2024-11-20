@@ -6,7 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Header from "../../components/Header/Header";
 import colors from "../../constants/Colors";
 import CardMenu from "../../components/Cards/CardMenu";
@@ -25,29 +25,31 @@ import consts from "../../constants/Consts";
 
 const Payment = ({ navigation }) => {
   const paymentInitialData = getPaymentInitialData();
+
+  //estados usados para pagamento
   const [paymentState, setPaymentState] = useState({
-    paymentAmount: paymentInitialData.amount,//valor total sem taxas
-    receiverName: paymentInitialData.name,//nome de quem esta recebendo o pix
+    paymentAmount: paymentInitialData.amount, //valor total sem taxas
+    receiverName: paymentInitialData.name, //nome de quem esta recebendo o pix
     amountToPay: `R$ ${paymentInitialData.amount?.toFixed(2)}`,
     totalAmountToPay: `R$ ${paymentInitialData.amount?.toFixed(2)}`,
   });
 
+  //estados usados para controle de funcionalidades
   const [controllerState, setControllerState] = useState({
-    radioMenu: consts.saldoEmConta,//radio button do menu principal
-    radioInstallments: null,//radio button das parcelas
-    cardInstallments: consts.escolherParcelas,//card com dados de pagamento
-    showCheckCard: false,//exibir o card com os dados de pagamento
-    buttonDisabled: false,//habilitacao do botao de pagar/continuar
-    modalVisible: false,//modal com a lista das parcelas do pagamento
+    radioMenu: consts.saldoEmConta, //radio button do menu principal
+    radioInstallments: null, //radio button das parcelas
+    cardInstallments: consts.escolherParcelas, //card com dados de pagamento
+    showCheckCard: false, //exibir o card com os dados de pagamento
+    buttonDisabled: false, //habilitacao do botao de pagar/continuar
+    modalVisible: false, //modal com a lista das parcelas do pagamento
+    radioInstallmentsController: null,
+    processPayment: false, //loading no processo de pagamento
   });
 
   const [userAccount, setUserAccount] = useState(); //dados da conta do usuario
   const [userCards, setUserCards] = useState(); //cartoes de credito do usuario
   const [paymentInfo, setPaymentInfo] = useState(); //informacoes do pagamento do pix
-  const [paymentSimulationItems, setPaymentSimulationItems] = useState(); //informacoes do simulacao do pagamento do pix       
-  const [radioInstallmentsController, setRadioInstallmentsController] =
-    useState(); //controaldor de radio button das parcelas   
-  const [processPayment, setProcessPayment] = useState(false); //chamar o loading no processo de pagamento
+  const [paymentSimulationItems, setPaymentSimulationItems] = useState(); //informacoes do simulacao do pagamento do pix
 
   useEffect(() => {
     const fetchData = async () => {
@@ -55,7 +57,7 @@ const Payment = ({ navigation }) => {
         const accountData = getUserAccount();
         const cardsData = getUserCards();
         const paymentInfoData = getPaymentInfo();
-        const simulationData = getPaymentSimulationItems();        
+        const simulationData = getPaymentSimulationItems();
 
         setUserAccount(accountData);
         setUserCards(cardsData);
@@ -69,36 +71,40 @@ const Payment = ({ navigation }) => {
   }, []);
 
   //funcao de controle do click nos botoes radio da tela de menu
-  const handleMenuSelection = (value, buttonDisabled) => {
+  const handleMenuSelection = useCallback((value, buttonDisabled) => {
     setControllerState((prev) => ({
       ...prev,
       radioMenu: value,
-      buttonDisabled
+      buttonDisabled,
     }));
-    
     setDataToInitialValue();
-  };
+  }, []);
 
   //funcao de controle do click nos botoes radio das parcelas de pagamento
-  const handleInstallmentsSelection = (value, buttonDisabled, item) => {
-    setPaymentState((prev) => ({
-      ...prev,
-      amountToPay: `${item.installments}x de R$ ${item.installmentAmount.toFixed(2)}`
-    }));
+  const handleInstallmentsSelection = useCallback(
+    (value, buttonDisabled, item) => {
+      setPaymentState((prev) => ({
+        ...prev,
+        amountToPay: `${
+          item.installments
+        }x de R$ ${item.installmentAmount.toFixed(2)}`,
+      }));
 
-    setControllerState((prev) => ({
-      ...prev,
-      radioInstallments: value,
-      buttonDisabled
-    }));
-  };
+      setControllerState((prev) => ({
+        ...prev,
+        radioInstallments: value,
+        buttonDisabled,
+      }));
+    },
+    []
+  );
 
   //funcao de setar os controles para os valores iniciais
   const setDataToInitialValue = () => {
     setPaymentState((prev) => ({
-      ...prev,      
+      ...prev,
       amountToPay: `R$ ${paymentState.paymentAmount?.toFixed(2)}`,
-      totalAmountToPay: `R$ ${paymentState.paymentAmount?.toFixed(2)}`,      
+      totalAmountToPay: `R$ ${paymentState.paymentAmount?.toFixed(2)}`,
     }));
 
     setControllerState((prev) => ({
@@ -106,35 +112,39 @@ const Payment = ({ navigation }) => {
       cardInstallments: consts.escolherParcelas,
       showCheckCard: false,
       radioInstallments: null,
+      radioInstallmentsController: null,
     }));
-
-    setRadioInstallmentsController();
   };
 
   //funcao de controle do botao de continuar dentro do modal com as listas de parcelas
   const handleContinueButton = () => {
     setPaymentState((prev) => ({
-      ...prev,      
-      totalAmountToPay: paymentState.amountToPay,      
+      ...prev,
+      totalAmountToPay: paymentState.amountToPay,
     }));
 
     setControllerState((prev) => ({
       ...prev,
       showCheckCard: true,
       cardInstallments: paymentState.amountToPay,
-      modalVisible: false
+      modalVisible: false,
+      radioInstallmentsController: controllerState.radioInstallments,
     }));
-      
-    setRadioInstallmentsController(controllerState.radioInstallments);
   };
 
   //funcao de controle do pagamento
   const handlePaymentProcess = () => {
-    setProcessPayment(true);   
-    
+    setControllerState((prev) => ({
+      ...prev,
+      processPayment: true,
+    }));
+
     setTimeout(() => {
-      //timeout adicionado apenas para fins de exibicao da tela de loaging
-      setProcessPayment(false);
+      //timeout adicionado apenas para fins de exibicao da tela de loading
+      setControllerState((prev) => ({
+        ...prev,
+        processPayment: false,
+      }));
       navigation.navigate("PixSuccess");
     }, 1000);
   };
@@ -142,20 +152,20 @@ const Payment = ({ navigation }) => {
   //funcao de controle para mostrar o modal com as parcelas de pagamento
   const openPaymentModal = (modalVisible) => {
     setPaymentState((prev) => ({
-      ...prev,      
+      ...prev,
       amountToPay: paymentState.totalAmountToPay,
     }));
 
     setControllerState((prev) => ({
       ...prev,
-      radioInstallments: radioInstallmentsController,
-      modalVisible
+      radioInstallments: controllerState.radioInstallmentsController,
+      modalVisible,
     }));
-    
+
     if (!controllerState.showCheckCard) {
       setControllerState((prev) => ({
         ...prev,
-        buttonDisabled: true
+        buttonDisabled: true,
       }));
     }
   };
@@ -164,19 +174,19 @@ const Payment = ({ navigation }) => {
   const closePaymentModal = () => {
     setControllerState((prev) => ({
       ...prev,
-      modalVisible: false
+      modalVisible: false,
     }));
-    
+
     if (!controllerState.showCheckCard) {
       setPaymentState((prev) => ({
         ...prev,
-        amountToPay: `R$ ${paymentState.paymentAmount.toFixed(2)}`,        
+        amountToPay: `R$ ${paymentState.paymentAmount.toFixed(2)}`,
       }));
 
       setControllerState((prev) => ({
         ...prev,
         buttonDisabled: true,
-        radioInstallments: null
+        radioInstallments: null,
       }));
     }
   };
@@ -187,7 +197,7 @@ const Payment = ({ navigation }) => {
   }
 
   //loading pra exibir durante o processo de pagamento
-  if (processPayment) {
+  if (controllerState.processPayment) {
     return <Loading text={consts.processandoTransferencia} />;
   }
 
@@ -260,7 +270,9 @@ const Payment = ({ navigation }) => {
                     <View style={styles.checkContainer}>
                       <View style={styles.checkRow}>
                         <Text>Valor a transferir</Text>
-                        <Text>{`R$ ${paymentState.paymentAmount?.toFixed(2)}`}</Text>
+                        <Text>{`R$ ${paymentState.paymentAmount?.toFixed(
+                          2
+                        )}`}</Text>
                       </View>
                       <View style={styles.checkRow}>
                         <Text>Taxa do cartão</Text>
@@ -363,4 +375,3 @@ const styles = StyleSheet.create({
 });
 
 export default Payment;
-
