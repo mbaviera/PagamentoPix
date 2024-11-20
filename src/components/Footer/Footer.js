@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import colors from "../../constants/Colors/Colors";
 
-const Footer = ({ valor, buttonDisabled, buttonText }) => {
+const Footer = ({ valor, buttonDisabled, buttonText, onPress }) => {
   return (
     <View style={styles.footerContainer}>
       <View style={{ flexDirection: "column" }}>
@@ -19,6 +19,7 @@ const Footer = ({ valor, buttonDisabled, buttonText }) => {
             },
           ]}
           disabled={buttonDisabled}
+          onPress={onPress}
         >
           <Text style={styles.textButtonContinuar}>{`${buttonText}`}</Text>
         </TouchableOpacity>

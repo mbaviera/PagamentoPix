@@ -8,22 +8,15 @@ const CardParcelas = ({
   onSelect,
   option,
 }) => {
-  const [userOption, setUserOption] = useState(1);
-
-  const selectHandler = (value) => {
-    onSelect(value);
-    setUserOption(value);
-  };
+  const handleSelect = () => onSelect(installments);
 
   return (
     <View style={styles.cardContainer}>
       <View style={styles.containerButton}>
         <Pressable
           style={installments === option ? styles.selected : styles.unselected}
-          onPress={() => selectHandler(installments)}
-        >
-          {/* <Text style={styles.option}>{item.value}</Text> */}
-        </Pressable>
+          onPress={handleSelect}
+        />
       </View>
 
       <View style={styles.textContainer}>

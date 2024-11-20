@@ -62,3 +62,11 @@ export const getPaymentSimulationItems = () => {
       })) || []
   );
 };
+
+export const getPaymentInitialData = () => {
+  const data = getPaymentInfo();
+  return {
+    amount: data[0]?.amount || null,
+    name: data[0]?.receiver?.name || ''
+  };
+};

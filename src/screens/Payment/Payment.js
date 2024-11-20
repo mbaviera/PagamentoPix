@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Modal,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../components/Header/Header";
 import colors from "../../constants/Colors/Colors";
 import CardMenu from "../../components/Cards/CardMenu";
@@ -16,37 +16,48 @@ import {
   getUserCards,
   getPaymentSimulationItems,
   getPaymentInfo,
+  getPaymentInitialData,
 } from "../../service/UserApi";
 import Footer from "../../components/Footer/Footer";
 import Icon from "react-native-vector-icons/FontAwesome";
 import CardParcelas from "../../components/Cards/CardParcelas";
 import RoundedButton from "../../components/Button/RoundedButton";
+import ProcessingTransferLoading from "../../components/Loading/ProcessingTransferLoading";
 
-export default function Payment({ navigation }) {
+const Payment = ({ navigation }) => {
+  const paymentInitialData = getPaymentInitialData();
+  const [userAccount, setUserAccount] = useState(getUserAccount()); //dados da conta do usuario
+  const [userCards, setUserCards] = useState(getUserCards()); //cartoes de credito do usuario
+  const [paymentInfo, setPaymentInfo] = useState(getPaymentInfo()); //informacoes do pagamento do pix
+  const [paymentSimulationItems, setPaymentSimulationItems] = useState(
+    getPaymentSimulationItems()
+  ); //informacoes do simulacao do pagamento do pix
+
+  const [cardFee, setCardFee] = useState(); //taxa do cartao de credito
+  const [installmentsFee, setInstallmentsFee] = useState(); //taxa das parcelas
+
+  const [paymentAmount, setPaymentAmount] = useState(paymentInitialData.amount); //valor total sem taxas
+  const [receiverName, setReceiverName] = useState(paymentInitialData.name); //nome de quem esta recebendo o pix
+  const [amountToPay, setAmountToPay] = useState(
+    `R$ ${paymentAmount?.toFixed(2)}`
+  ); //valor a pagar (installments x installmentAmount)
+  const [installments, setInstallments] = useState(); //parcelas (installments)
+  const [installmentAmount, setInstallmentAmount] = useState(); //valor das parcelas (installmentAmount)
+
   const [cardInstallments, setCardInstallments] = useState(`Escolher Parcelas`); //card exibido ao selecionar algum cartao de credito
-  const [paymentAmount, setPaymentAmount] = useState(100.00); //valor total sem taxas
-  const [amountToPay, setAmountToPay] = useState(`R$ ${paymentAmount.toFixed(2)}`); //installments x installmentAmount
-  const [installments, setInstallments] = useState(); //installments
-  const [installmentAmount, setInstallmentAmount] = useState(); //installmentAmount
+  const [radioButtonMenu, setRadioButtonMenu] = useState("Saldo em conta"); //radio button do menu principal
+  const [radioButtonInstallments, setRadioButtonInstallments] = useState(); //radio button do modal com a lista de parcelas
 
-  const [cardFee, setCardFee] = useState();//taxa do cartao de credito
-  const [installmentsFee, setInstallmentsFee] = useState();//taxa das parcelas
-
-  const [userAccount, setUserAccount] = useState(getUserAccount());//dados da conta do usuario
-  const [userCards, setUserCards] = useState(getUserCards());//cartoes de credito do usuario
-  const [paymentInfo, setPaymentInfo] = useState(getPaymentInfo());//informacoes do pagamento do pix
-  const [paymentSimulationItems, setPaymentSimulationItems] = useState(getPaymentSimulationItems());//informacoes do simulacao do pagamento do pix
-
-  const [radioButtonMenu, setRadioButtonMenu] = useState("Saldo em conta");//radio button do menu principal
-  const [radioButtonInstallments, setRadioButtonInstallments] = useState();//radio button do modal com a lista de parcelas
-
-  const [buttonDisabled, setButtonDisabled] = useState(false);//habilitacao do botao de pagar/continuar
-  const [modalVisible, setModalVisible] = useState(false);//modal com a lista das parcelas do pagamento
+  const [buttonDisabled, setButtonDisabled] = useState(false); //habilitacao do botao de pagar/continuar
+  const [modalVisible, setModalVisible] = useState(false); //modal com a lista das parcelas do pagamento
+  const [showCheckCard, setShowCheckCard] = useState(false); //card com as informacoes finais do pagamento com cartao de credito
+  const [processPayment, setProcessPayment] = useState(false);  
 
   //funcao de controle do click nos botoes radio da tela de menu
   const handleRadioButtonMenuClick = (value, buttonDisabled) => {
     setRadioButtonMenu(value);
     setButtonDisabled(buttonDisabled);
+    setShowCheckCard(false);
   };
 
   //funcao de controle do click nos botoes radio das parcelas de pagamento
@@ -66,7 +77,7 @@ export default function Payment({ navigation }) {
     setInstallments(installments);
 
     setCardFee(fees.fixedAmount);
-    setInstallmentsFee(fees.installmentAmount);    
+    setInstallmentsFee(fees.installmentAmount);
   };
 
   //funcao de controle para mostrar o modal com as parcelas de pagamento
@@ -82,6 +93,26 @@ export default function Payment({ navigation }) {
     setModalVisible(false);
     setButtonDisabled(true);
   };
+
+  //funcao de controle do botao de continuar dentro do modal com as listas de parcelas
+  const handleContinueButton = () => {
+    setShowCheckCard(true);
+    setCardInstallments(amountToPay);
+    setModalVisible(false);
+  };
+
+  //funcao de controle do pagamento
+  const handleProcessPayment = () => {
+    setProcessPayment(true);
+    setTimeout(() => {//timeout adicionado apenas para fins de exibicao da tela de loaging
+      setProcessPayment(false);
+      navigation.navigate("PixSuccess");
+    }, 1000);
+  };
+
+  if (processPayment) {
+    return <ProcessingTransferLoading text={"Processando sua transferência"} />;
+  }
 
   const renderModalParcelas = () => {
     return (
@@ -132,6 +163,7 @@ export default function Payment({ navigation }) {
             valor={amountToPay}
             buttonText={"Continuar"}
             buttonDisabled={buttonDisabled}
+            onPress={() => handleContinueButton()}
           />
         </SafeAreaView>
       </Modal>
@@ -165,26 +197,71 @@ export default function Payment({ navigation }) {
         <View style={styles.textContainer}>
           <Text style={styles.textCartoes}>Cartões de Crédito</Text>
           {userCards?.map((item) => (
-            <>
+            <View key={item.name}>
               <CardMenu
-                key={item.name}
                 title={item.name}
                 subtitle={item.cardNumber}
-                onSelect={(value) =>
-                  handleRadioButtonMenuClick(value, true)
-                }
+                onSelect={(value) => handleRadioButtonMenuClick(value, true)}
                 option={radioButtonMenu}
               />
               {radioButtonMenu === item.name ? (
-                <TouchableOpacity
-                  style={styles.parcelasContainer}
-                  onPress={() => handleShowModal(true)}
-                >
-                  <Text style={styles.textParcelas}>{`${cardInstallments}`}</Text>
-                  <Icon name="chevron-right" size={18} color={colors.main700} />
-                </TouchableOpacity>
+                <>
+                  <TouchableOpacity
+                    style={styles.parcelasContainer}
+                    onPress={() => handleShowModal(true)}
+                  >
+                    <Text
+                      style={styles.textParcelas}
+                    >{`${cardInstallments}`}</Text>
+                    <Icon
+                      name="chevron-right"
+                      size={18}
+                      color={colors.main700}
+                    />
+                  </TouchableOpacity>
+                  {showCheckCard ? (
+                    <View style={styles.checkContainer}>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Text>Valor a transferir</Text>
+                        <Text>{`R$ ${paymentAmount?.toFixed(2)}`}</Text>
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Text>Taxa do cartão</Text>
+                        <Text>100</Text>
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Text>Taxa de parcelamento</Text>
+                        <Text>-</Text>
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Text>Valor a transferir + taxas</Text>
+                        <Text>{amountToPay}</Text>
+                      </View>
+                    </View>
+                  ) : null}
+                </>
               ) : null}
-            </>
+            </View>
           ))}
         </View>
       </ScrollView>
@@ -192,10 +269,11 @@ export default function Payment({ navigation }) {
         valor={amountToPay}
         buttonDisabled={buttonDisabled}
         buttonText={"Pagar"}
+        onPress={() => handleProcessPayment()}
       />
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -241,6 +319,11 @@ const styles = StyleSheet.create({
     marginVertical: 16,
     borderRadius: 8,
   },
+  checkContainer: {
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: colors.white,
+  },
   textParcelas: {
     color: colors.main700,
     fontSize: 16,
@@ -249,7 +332,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flexGrow: 1,
-    paddingBottom: 5
+    paddingBottom: 5,
   },
   footer: {
     padding: 10,
@@ -285,3 +368,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
+
+export default Payment;
