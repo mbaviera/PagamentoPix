@@ -25,13 +25,14 @@ import consts from "../../constants/Consts";
 
 const Payment = ({ navigation }) => {
   const paymentInitialData = getPaymentInitialData();
+  const formatCurrency = (value) => `R$ ${value?.toFixed(2)}`;
 
   //estados usados para pagamento
   const [paymentState, setPaymentState] = useState({
     paymentAmount: paymentInitialData.amount, //valor total sem taxas
     receiverName: paymentInitialData.name, //nome de quem esta recebendo o pix
-    amountToPay: `R$ ${paymentInitialData.amount?.toFixed(2)}`,
-    totalAmountToPay: `R$ ${paymentInitialData.amount?.toFixed(2)}`,
+    amountToPay: formatCurrency(paymentInitialData.amount),
+    totalAmountToPay: formatCurrency(paymentInitialData.amount),
   });
 
   //estados usados para controle de funcionalidades
@@ -87,7 +88,7 @@ const Payment = ({ navigation }) => {
         ...prev,
         amountToPay: `${
           item.installments
-        }x de R$ ${item.installmentAmount.toFixed(2)}`,
+        }x de ${formatCurrency(item.installmentAmount)}`,
       }));
 
       setControllerState((prev) => ({
@@ -103,8 +104,8 @@ const Payment = ({ navigation }) => {
   const setDataToInitialValue = () => {
     setPaymentState((prev) => ({
       ...prev,
-      amountToPay: `R$ ${paymentState.paymentAmount?.toFixed(2)}`,
-      totalAmountToPay: `R$ ${paymentState.paymentAmount?.toFixed(2)}`,
+      amountToPay: formatCurrency(paymentState.paymentAmount),
+      totalAmountToPay: formatCurrency(paymentState.paymentAmount),
     }));
 
     setControllerState((prev) => ({
@@ -180,7 +181,7 @@ const Payment = ({ navigation }) => {
     if (!controllerState.showCheckCard) {
       setPaymentState((prev) => ({
         ...prev,
-        amountToPay: `R$ ${paymentState.paymentAmount.toFixed(2)}`,
+        amountToPay: formatCurrency(paymentState.paymentAmount),
       }));
 
       setControllerState((prev) => ({
@@ -234,7 +235,7 @@ const Payment = ({ navigation }) => {
             <CardMenu
               key={item.accountId}
               title={consts.saldoEmConta}
-              subtitle={`Disponível R$ ${item.balance}`}
+              subtitle={`Disponível ${formatCurrency(item.balance)}`}
               onSelect={(value) => handleMenuSelection(value, false)}
               option={controllerState.radioMenu}
             />
@@ -270,9 +271,7 @@ const Payment = ({ navigation }) => {
                     <View style={styles.checkContainer}>
                       <View style={styles.checkRow}>
                         <Text>Valor a transferir</Text>
-                        <Text>{`R$ ${paymentState.paymentAmount?.toFixed(
-                          2
-                        )}`}</Text>
+                        <Text>{`${formatCurrency(paymentState.paymentAmount)}`}</Text>
                       </View>
                       <View style={styles.checkRow}>
                         <Text>Taxa do cartão</Text>
