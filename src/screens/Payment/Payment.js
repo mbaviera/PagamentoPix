@@ -5,7 +5,6 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  Modal,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Header from "../../components/Header/Header";
@@ -20,18 +19,15 @@ import {
 } from "../../service/UserApi";
 import Footer from "../../components/Footer/Footer";
 import Icon from "react-native-vector-icons/FontAwesome";
-import CardParcelas from "../../components/Cards/CardParcelas";
-import RoundedButton from "../../components/Button/RoundedButton";
-import ProcessingTransferLoading from "../../components/Loading/ProcessingTransferLoading";
+import PaymentModal from "../../components/Modal/PaymentModal";
+import Loading from "../../components/Loading/ProcessingTransferLoading";
 
 const Payment = ({ navigation }) => {
   const paymentInitialData = getPaymentInitialData();
-  const [userAccount, setUserAccount] = useState(getUserAccount()); //dados da conta do usuario
-  const [userCards, setUserCards] = useState(getUserCards()); //cartoes de credito do usuario
-  const [paymentInfo, setPaymentInfo] = useState(getPaymentInfo()); //informacoes do pagamento do pix
-  const [paymentSimulationItems, setPaymentSimulationItems] = useState(
-    getPaymentSimulationItems()
-  ); //informacoes do simulacao do pagamento do pix
+  const [userAccount, setUserAccount] = useState(); //dados da conta do usuario
+  const [userCards, setUserCards] = useState(); //cartoes de credito do usuario
+  const [paymentInfo, setPaymentInfo] = useState(); //informacoes do pagamento do pix
+  const [paymentSimulationItems, setPaymentSimulationItems] = useState(); //informacoes do simulacao do pagamento do pix
 
   const [cardFee, setCardFee] = useState(); //taxa do cartao de credito
   const [installmentsFee, setInstallmentsFee] = useState(); //taxa das parcelas
@@ -46,48 +42,64 @@ const Payment = ({ navigation }) => {
 
   const [cardInstallments, setCardInstallments] = useState(`Escolher Parcelas`); //card exibido ao selecionar algum cartao de credito
   const [radioButtonMenu, setRadioButtonMenu] = useState("Saldo em conta"); //radio button do menu principal
-  const [radioButtonInstallments, setRadioButtonInstallments] = useState(); //radio button do modal com a lista de parcelas
+  const [radioButtonInstallments, setRadioButtonInstallments] = useState(); //controaldor de qual radio button do modal sera marcado
 
   const [buttonDisabled, setButtonDisabled] = useState(false); //habilitacao do botao de pagar/continuar
   const [modalVisible, setModalVisible] = useState(false); //modal com a lista das parcelas do pagamento
   const [showCheckCard, setShowCheckCard] = useState(false); //card com as informacoes finais do pagamento com cartao de credito
-  const [processPayment, setProcessPayment] = useState(false);  
+  const [processPayment, setProcessPayment] = useState(false);//chamar o loading no processo de pagamento 
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const accountData = getUserAccount();
+        const cardsData = getUserCards();
+        const paymentInfoData = getPaymentInfo();
+        const simulationData = getPaymentSimulationItems();
+
+        setUserAccount(accountData);
+        setUserCards(cardsData);
+        setPaymentInfo(paymentInfoData);
+        setPaymentSimulationItems(simulationData);
+      } catch (error) {
+        console.error("Erro ao buscar dados:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   //funcao de controle do click nos botoes radio da tela de menu
-  const handleRadioButtonMenuClick = (value, buttonDisabled) => {
+  const handleMenuSelection = (value, buttonDisabled) => {
     setRadioButtonMenu(value);
     setButtonDisabled(buttonDisabled);
     setShowCheckCard(false);
   };
 
   //funcao de controle do click nos botoes radio das parcelas de pagamento
-  const handleRadioButtonInstallmentsClick = (
-    value,
-    buttonDisabled,
-    amountToPay,
-    installmentAmount,
-    installments,
-    fees
-  ) => {
+  const handleInstallmentsSelection = (value, buttonDisabled, item) => {
     setRadioButtonInstallments(value);
     setButtonDisabled(buttonDisabled);
+    updateInstallmentInfo(item.installments, item.installmentAmount, item.fees);
+  };
 
+  //funcao de atualizar os dados referente ao pagamento por parcelas
+  const updateInstallmentInfo = (installments, installmentAmount, fees) => {
     setInstallmentAmount(installmentAmount);
     setAmountToPay(`${installments}x de R$ ${installmentAmount.toFixed(2)}`);
     setInstallments(installments);
-
     setCardFee(fees.fixedAmount);
     setInstallmentsFee(fees.installmentAmount);
   };
 
   //funcao de controle para mostrar o modal com as parcelas de pagamento
-  const handleShowModal = (modalVisible) => {
+  const openPaymentModal = (modalVisible) => {
     setModalVisible(modalVisible);
     setButtonDisabled(true);
   };
 
   //funcao de controle para fechar o modal com as parcelas de pagamento
-  const handleCloseModal = () => {
+  const closePaymentModal = () => {
     setRadioButtonInstallments();
     setAmountToPay(`R$ ${paymentAmount.toFixed(2)}`);
     setModalVisible(false);
@@ -102,77 +114,44 @@ const Payment = ({ navigation }) => {
   };
 
   //funcao de controle do pagamento
-  const handleProcessPayment = () => {
+  const handlePaymentProcess = () => {
     setProcessPayment(true);
-    setTimeout(() => {//timeout adicionado apenas para fins de exibicao da tela de loaging
+    setTimeout(() => {
+      //timeout adicionado apenas para fins de exibicao da tela de loaging
       setProcessPayment(false);
       navigation.navigate("PixSuccess");
     }, 1000);
   };
 
-  if (processPayment) {
-    return <ProcessingTransferLoading text={"Processando sua transferência"} />;
+  //estado de erro pra carregar os dados da conta do usuario 
+  if (!userAccount) {
+    return <Loading text={"Carregando dados da conta..."} />;
   }
 
-  const renderModalParcelas = () => {
+  //loading pra exibir durante o processo de pagamento
+  if (processPayment) {
+    return <Loading text={"Processando sua transferência"} />;
+  }
+
+  //funcao de exibir o componente modal com as parcelas
+  const renderInstallmentsModal = () => {
     return (
-      <Modal
-        animationType="slide"
-        transparent={true}
+      <PaymentModal
         visible={modalVisible}
-        onRequestClose={() => handleCloseModal()}
-      >
-        <SafeAreaView style={styles.safeContainerModal}>
-          <View style={styles.headerModalContainer}>
-            <Text style={styles.textTitleModal}>Parcelas do pagamento</Text>
-            <RoundedButton
-              iconName={"close"}
-              iconSize={24}
-              iconColor={colors.main800}
-              onPress={() => handleCloseModal(false)}
-            />
-          </View>
-
-          <View style={styles.subTitleModalContainer}>
-            <Text style={styles.textSubtitleModal}>
-              O destinatário receberá a vista e você pagara parcelado.
-            </Text>
-          </View>
-
-          <ScrollView contentContainerStyle={styles.scrollView} bounces={false}>
-            {paymentSimulationItems?.map((item) => (
-              <CardParcelas
-                key={item.installments}
-                installments={item.installments}
-                installmentAmount={item.installmentAmount}
-                onSelect={(value) =>
-                  handleRadioButtonInstallmentsClick(
-                    value,
-                    false,
-                    item.amountToPay,
-                    item.installmentAmount,
-                    item.installments,
-                    item.fees
-                  )
-                }
-                option={radioButtonInstallments}
-              />
-            ))}
-          </ScrollView>
-          <Footer
-            valor={amountToPay}
-            buttonText={"Continuar"}
-            buttonDisabled={buttonDisabled}
-            onPress={() => handleContinueButton()}
-          />
-        </SafeAreaView>
-      </Modal>
+        onClose={closePaymentModal}
+        paymentSimulationItems={paymentSimulationItems}
+        onSelect={handleInstallmentsSelection}
+        amountToPay={amountToPay}
+        buttonDisabled={buttonDisabled}
+        onContinue={handleContinueButton}
+        radioButtonInstallments={radioButtonInstallments}
+      />
     );
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      {renderModalParcelas()}
+      {renderInstallmentsModal()}
       <Header titleHeader={"Transferência Pix"} />
       <View style={styles.textContainer}>
         <Text style={styles.paymentSubtitle}>
@@ -188,7 +167,7 @@ const Payment = ({ navigation }) => {
               key={item.accountId}
               title={"Saldo em conta"}
               subtitle={`Disponível R$ ${item.balance}`}
-              onSelect={(value) => handleRadioButtonMenuClick(value, false)}
+              onSelect={(value) => handleMenuSelection(value, false)}
               option={radioButtonMenu}
             />
           ))}
@@ -201,14 +180,14 @@ const Payment = ({ navigation }) => {
               <CardMenu
                 title={item.name}
                 subtitle={item.cardNumber}
-                onSelect={(value) => handleRadioButtonMenuClick(value, true)}
+                onSelect={(value) => handleMenuSelection(value, true)}
                 option={radioButtonMenu}
               />
               {radioButtonMenu === item.name ? (
                 <>
                   <TouchableOpacity
                     style={styles.parcelasContainer}
-                    onPress={() => handleShowModal(true)}
+                    onPress={() => openPaymentModal(true)}
                   >
                     <Text
                       style={styles.textParcelas}
@@ -269,7 +248,7 @@ const Payment = ({ navigation }) => {
         valor={amountToPay}
         buttonDisabled={buttonDisabled}
         buttonText={"Pagar"}
-        onPress={() => handleProcessPayment()}
+        onPress={() => handlePaymentProcess()}
       />
     </SafeAreaView>
   );
@@ -338,34 +317,6 @@ const styles = StyleSheet.create({
     padding: 10,
     justifyContent: "center",
     alignItems: "center",
-  },
-  safeContainerModal: {
-    flex: 1,
-    backgroundColor: colors.white,
-    marginTop: 80,
-    elevation: 5,
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
-  },
-  headerModalContainer: {
-    flexDirection: "row",
-    paddingHorizontal: 16,
-    justifyContent: "space-between",
-    paddingTop: 8,
-    paddingBottom: 16,
-    marginTop: 25,
-  },
-  textTitleModal: {
-    fontSize: 24,
-  },
-  subTitleModalContainer: {
-    flexDirection: "row",
-    paddingHorizontal: 16,
-    justifyContent: "space-between",
-    paddingBottom: 16,
-  },
-  textSubtitleModal: {
-    fontSize: 16,
   },
 });
 

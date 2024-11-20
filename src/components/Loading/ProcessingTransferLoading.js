@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
 
-const ProcessingTransferLoading = ({ text }) => {
+const Loading = ({ text }) => {
   return (
     <View style={styles.container}>
       <ActivityIndicator size="large" color="#00bfa5" style={styles.loader} />
@@ -28,4 +28,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProcessingTransferLoading;
+export default Loading;
