@@ -30,6 +30,9 @@ const Payment = ({ navigation }) => {
     receiverName: paymentInitialData.name,//nome de quem esta recebendo o pix
     amountToPay: `R$ ${paymentInitialData.amount?.toFixed(2)}`,
     totalAmountToPay: `R$ ${paymentInitialData.amount?.toFixed(2)}`,
+  });
+
+  const [controllerState, setControllerState] = useState({
     radioMenu: consts.saldoEmConta,//radio button do menu principal
     radioInstallments: null,//radio button das parcelas
     cardInstallments: consts.escolherParcelas,//card com dados de pagamento
@@ -67,7 +70,7 @@ const Payment = ({ navigation }) => {
 
   //funcao de controle do click nos botoes radio da tela de menu
   const handleMenuSelection = (value, buttonDisabled) => {
-    setPaymentState((prev) => ({
+    setControllerState((prev) => ({
       ...prev,
       radioMenu: value,
       buttonDisabled
@@ -80,35 +83,49 @@ const Payment = ({ navigation }) => {
   const handleInstallmentsSelection = (value, buttonDisabled, item) => {
     setPaymentState((prev) => ({
       ...prev,
-      radioInstallments: value,
-      buttonDisabled,
       amountToPay: `${item.installments}x de R$ ${item.installmentAmount.toFixed(2)}`
+    }));
+
+    setControllerState((prev) => ({
+      ...prev,
+      radioInstallments: value,
+      buttonDisabled
     }));
   };
 
   //funcao de setar os controles para os valores iniciais
   const setDataToInitialValue = () => {
     setPaymentState((prev) => ({
-      ...prev,
-      showCheckCard: false,
-      cardInstallments: consts.escolherParcelas,
+      ...prev,      
       amountToPay: `R$ ${paymentState.paymentAmount?.toFixed(2)}`,
-      totalAmountToPay: `R$ ${paymentState.paymentAmount?.toFixed(2)}`,
+      totalAmountToPay: `R$ ${paymentState.paymentAmount?.toFixed(2)}`,      
+    }));
+
+    setControllerState((prev) => ({
+      ...prev,
+      cardInstallments: consts.escolherParcelas,
+      showCheckCard: false,
       radioInstallments: null,
     }));
+
     setRadioInstallmentsController();
   };
 
   //funcao de controle do botao de continuar dentro do modal com as listas de parcelas
   const handleContinueButton = () => {
     setPaymentState((prev) => ({
+      ...prev,      
+      totalAmountToPay: paymentState.amountToPay,      
+    }));
+
+    setControllerState((prev) => ({
       ...prev,
       showCheckCard: true,
       cardInstallments: paymentState.amountToPay,
-      totalAmountToPay: paymentState.amountToPay,
       modalVisible: false
-    }));    
-    setRadioInstallmentsController(paymentState.radioInstallments);
+    }));
+      
+    setRadioInstallmentsController(controllerState.radioInstallments);
   };
 
   //funcao de controle do pagamento
@@ -125,14 +142,18 @@ const Payment = ({ navigation }) => {
   //funcao de controle para mostrar o modal com as parcelas de pagamento
   const openPaymentModal = (modalVisible) => {
     setPaymentState((prev) => ({
+      ...prev,      
+      amountToPay: paymentState.totalAmountToPay,
+    }));
+
+    setControllerState((prev) => ({
       ...prev,
       radioInstallments: radioInstallmentsController,
-      amountToPay: paymentState.totalAmountToPay,
       modalVisible
     }));
     
-    if (!paymentState.showCheckCard) {
-      setPaymentState((prev) => ({
+    if (!controllerState.showCheckCard) {
+      setControllerState((prev) => ({
         ...prev,
         buttonDisabled: true
       }));
@@ -141,15 +162,19 @@ const Payment = ({ navigation }) => {
 
   //funcao de controle para fechar o modal com as parcelas de pagamento
   const closePaymentModal = () => {
-    setPaymentState((prev) => ({
+    setControllerState((prev) => ({
       ...prev,
       modalVisible: false
     }));
     
-    if (!paymentState.showCheckCard) {
+    if (!controllerState.showCheckCard) {
       setPaymentState((prev) => ({
         ...prev,
-        amountToPay: `R$ ${paymentState.paymentAmount.toFixed(2)}`,
+        amountToPay: `R$ ${paymentState.paymentAmount.toFixed(2)}`,        
+      }));
+
+      setControllerState((prev) => ({
+        ...prev,
         buttonDisabled: true,
         radioInstallments: null
       }));
@@ -170,14 +195,14 @@ const Payment = ({ navigation }) => {
   const renderInstallmentsModal = () => {
     return (
       <PaymentModal
-        visible={paymentState.modalVisible}
+        visible={controllerState.modalVisible}
         onClose={closePaymentModal}
         paymentSimulationItems={paymentSimulationItems}
         onSelect={handleInstallmentsSelection}
         amountToPay={paymentState.amountToPay}
-        buttonDisabled={paymentState.buttonDisabled}
+        buttonDisabled={controllerState.buttonDisabled}
         onContinue={handleContinueButton}
-        radioButtonInstallments={paymentState.radioInstallments}
+        radioButtonInstallments={controllerState.radioInstallments}
       />
     );
   };
@@ -201,7 +226,7 @@ const Payment = ({ navigation }) => {
               title={consts.saldoEmConta}
               subtitle={`Disponível R$ ${item.balance}`}
               onSelect={(value) => handleMenuSelection(value, false)}
-              option={paymentState.radioMenu}
+              option={controllerState.radioMenu}
             />
           ))}
         </View>
@@ -214,9 +239,9 @@ const Payment = ({ navigation }) => {
                 title={item.name}
                 subtitle={item.cardNumber}
                 onSelect={(value) => handleMenuSelection(value, true)}
-                option={paymentState.radioMenu}
+                option={controllerState.radioMenu}
               />
-              {paymentState.radioMenu === item.name ? (
+              {controllerState.radioMenu === item.name ? (
                 <>
                   <TouchableOpacity
                     style={styles.parcelasContainer}
@@ -224,14 +249,14 @@ const Payment = ({ navigation }) => {
                   >
                     <Text
                       style={styles.textParcelas}
-                    >{`${paymentState.cardInstallments}`}</Text>
+                    >{`${controllerState.cardInstallments}`}</Text>
                     <Icon
                       name="chevron-right"
                       size={18}
                       color={colors.main700}
                     />
                   </TouchableOpacity>
-                  {paymentState.showCheckCard ? (
+                  {controllerState.showCheckCard ? (
                     <View style={styles.checkContainer}>
                       <View style={styles.checkRow}>
                         <Text>Valor a transferir</Text>
@@ -259,7 +284,7 @@ const Payment = ({ navigation }) => {
       </ScrollView>
       <Footer
         valor={paymentState.totalAmountToPay}
-        buttonDisabled={paymentState.buttonDisabled}
+        buttonDisabled={controllerState.buttonDisabled}
         buttonText={"Pagar"}
         onPress={() => handlePaymentProcess()}
       />
