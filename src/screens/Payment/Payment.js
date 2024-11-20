@@ -20,7 +20,7 @@ import {
 import Footer from "../../components/Footer/Footer";
 import Icon from "react-native-vector-icons/FontAwesome";
 import PaymentModal from "../../components/Modal/PaymentModal";
-import Loading from "../../components/Loading/ProcessingTransferLoading";
+import Loading from "../../components/Loading/Loading";
 
 const Payment = ({ navigation }) => {
   const paymentInitialData = getPaymentInitialData();
