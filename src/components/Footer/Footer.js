@@ -2,12 +2,12 @@ import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import colors from "../../constants/Colors/Colors";
 
-export default function Footer({ valor, buttonDisabled, buttonText }) {
+const Footer = ({ valor, buttonDisabled, buttonText }) => {
   return (
     <View style={styles.footerContainer}>
       <View style={{ flexDirection: "column" }}>
         <Text style={styles.textTitle}>{`Valor a ser pago`}</Text>
-        <Text style={styles.textSubtitle}>{`R$ ${valor}`}</Text>
+        <Text style={styles.textSubtitle}>{`${valor}`}</Text>
       </View>
 
       <View style={{ justifyContent: "center" }}>
@@ -25,7 +25,7 @@ export default function Footer({ valor, buttonDisabled, buttonText }) {
       </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   footerContainer: {
@@ -47,12 +47,12 @@ const styles = StyleSheet.create({
   },
   textTitle: {
     marginBottom: 2,
-    fontVariant: "Montserrat-Regular",
+    fontFamily: "Montserrat-Regular",
     fontSize: 14,
   },
   textSubtitle: {
     marginTop: 2,
-    fontVariant: "Montserrat-Bold",
+    fontFamily: "Montserrat-Bold",
     fontSize: 18,
   },
   textButtonContinuar: {
@@ -60,3 +60,5 @@ const styles = StyleSheet.create({
     color: colors.white,
   },
 });
+
+export default Footer;

@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import colors from "../../constants/Colors/Colors";
 
-export default function CardParcelas({
+const CardParcelas = ({
   installments,
   installmentAmount,
   onSelect,
   option,
-}) {
+}) => {
   const [userOption, setUserOption] = useState(1);
 
   const selectHandler = (value) => {
@@ -29,11 +29,11 @@ export default function CardParcelas({
       <View style={styles.textContainer}>
         <Text
           style={styles.titleStyle}
-        >{`${installments} x ${installmentAmount}`}</Text>
+        >{`${installments} x de ${installmentAmount}`}</Text>
       </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   cardContainer: {
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     elevation: 2,
     marginTop: 8,
     marginHorizontal: 16,
-    alignItems: 'center'
+    alignItems: "center",
   },
   textContainer: {
     flexDirection: "column",
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   titleStyle: {
     color: colors.main700,
     fontSize: 16,
-    fontFamily: "Montserrat-Semibold",
+    fontFamily: "Montserrat-SemiBold",
     lineHeight: 20,
     backgroundColor: colors.white,
   },
@@ -86,3 +86,5 @@ const styles = StyleSheet.create({
     borderColor: colors.white,
   },
 });
+
+export default CardParcelas;

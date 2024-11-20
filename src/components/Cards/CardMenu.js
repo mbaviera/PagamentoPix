@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import colors from "../../constants/Colors/Colors";
 
-export default function CardMenu({ title, subtitle, onSelect, option }) {
+const CardMenu = ({ title, subtitle, onSelect, option }) => {
   const [userOption, setUserOption] = useState("Saldo em conta");
-
   const selectHandler = (value) => {
     onSelect(value);
     setUserOption(value);
@@ -25,7 +24,7 @@ export default function CardMenu({ title, subtitle, onSelect, option }) {
       </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   cardContainer: {
@@ -37,7 +36,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     elevation: 6,
     marginTop: 8,
-    alignItems: 'center'
+    alignItems: "center",
   },
   textContainer: {
     flexDirection: "column",
@@ -46,7 +45,7 @@ const styles = StyleSheet.create({
   titleStyle: {
     color: colors.main700,
     fontSize: 16,
-    fontFamily: "Montserrat-Semibold",
+    fontFamily: "Montserrat-SemiBold",
     lineHeight: 20,
     backgroundColor: colors.white,
   },
@@ -83,3 +82,5 @@ const styles = StyleSheet.create({
     borderColor: colors.white,
   },
 });
+
+export default CardMenu;

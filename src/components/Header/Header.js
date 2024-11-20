@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import RoundedButton from "../Button/RoundedButton";
 import colors from "../../constants/Colors/Colors";
 
-export default function Header({ titleHeader }) {
+const Header = ({ titleHeader }) => {
   return (
     <View style={styles.headerContainer}>
       <View style={styles.contentArea}>
@@ -16,7 +16,7 @@ export default function Header({ titleHeader }) {
       <Text style={styles.textTitle}>{`${titleHeader}`}</Text>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   headerContainer: {
@@ -40,3 +40,5 @@ const styles = StyleSheet.create({
     backgroundColor: colors.grey100,
   },
 });
+
+export default Header;

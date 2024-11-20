@@ -15,6 +15,7 @@ import {
   getUserAccount,
   getUserCards,
   getPaymentSimulationItems,
+  getPaymentInfo,
 } from "../../service/UserApi";
 import Footer from "../../components/Footer/Footer";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -22,34 +23,65 @@ import CardParcelas from "../../components/Cards/CardParcelas";
 import RoundedButton from "../../components/Button/RoundedButton";
 
 export default function Payment({ navigation }) {
-  const [userAccount, setUserAccount] = useState(getUserAccount());
-  const [userCards, setUserCards] = useState(getUserCards());
-  const [paymentSimulationItems, setPaymentSimulationItems] = useState(
-    getPaymentSimulationItems()
-  );
+  const [cardInstallments, setCardInstallments] = useState(`Escolher Parcelas`); //card exibido ao selecionar algum cartao de credito
+  const [paymentAmount, setPaymentAmount] = useState(100.00); //valor total sem taxas
+  const [amountToPay, setAmountToPay] = useState(`R$ ${paymentAmount.toFixed(2)}`); //installments x installmentAmount
+  const [installments, setInstallments] = useState(); //installments
+  const [installmentAmount, setInstallmentAmount] = useState(); //installmentAmount
 
-  const [radioButtonOptionCardMenu, setRadioButtonOptionCardMenu] =
-    useState("Saldo em conta");
-  const [radioButtonOptionCardParcelas, setRadioButtonOptionCardParcelas] =
-    useState(1);
+  const [cardFee, setCardFee] = useState();//taxa do cartao de credito
+  const [installmentsFee, setInstallmentsFee] = useState();//taxa das parcelas
 
-  const [buttonDisabled, setButtonDisabled] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [userAccount, setUserAccount] = useState(getUserAccount());//dados da conta do usuario
+  const [userCards, setUserCards] = useState(getUserCards());//cartoes de credito do usuario
+  const [paymentInfo, setPaymentInfo] = useState(getPaymentInfo());//informacoes do pagamento do pix
+  const [paymentSimulationItems, setPaymentSimulationItems] = useState(getPaymentSimulationItems());//informacoes do simulacao do pagamento do pix
 
-  function handleCardMenuRadioButtonClick(value, buttonDisabled) {
-    setRadioButtonOptionCardMenu(value);
+  const [radioButtonMenu, setRadioButtonMenu] = useState("Saldo em conta");//radio button do menu principal
+  const [radioButtonInstallments, setRadioButtonInstallments] = useState();//radio button do modal com a lista de parcelas
+
+  const [buttonDisabled, setButtonDisabled] = useState(false);//habilitacao do botao de pagar/continuar
+  const [modalVisible, setModalVisible] = useState(false);//modal com a lista das parcelas do pagamento
+
+  //funcao de controle do click nos botoes radio da tela de menu
+  const handleRadioButtonMenuClick = (value, buttonDisabled) => {
+    setRadioButtonMenu(value);
     setButtonDisabled(buttonDisabled);
-  }
+  };
 
-  function handleCardPaymentRadioButtonClick(value, buttonDisabled) {
-    setRadioButtonOptionCardParcelas(value);
+  //funcao de controle do click nos botoes radio das parcelas de pagamento
+  const handleRadioButtonInstallmentsClick = (
+    value,
+    buttonDisabled,
+    amountToPay,
+    installmentAmount,
+    installments,
+    fees
+  ) => {
+    setRadioButtonInstallments(value);
     setButtonDisabled(buttonDisabled);
-  }
 
-  function handleShowModal(modalVisible) {
+    setInstallmentAmount(installmentAmount);
+    setAmountToPay(`${installments}x de R$ ${installmentAmount.toFixed(2)}`);
+    setInstallments(installments);
+
+    setCardFee(fees.fixedAmount);
+    setInstallmentsFee(fees.installmentAmount);    
+  };
+
+  //funcao de controle para mostrar o modal com as parcelas de pagamento
+  const handleShowModal = (modalVisible) => {
     setModalVisible(modalVisible);
-    setRadioButtonOptionCardParcelas(1);
-  }
+    setButtonDisabled(true);
+  };
+
+  //funcao de controle para fechar o modal com as parcelas de pagamento
+  const handleCloseModal = () => {
+    setRadioButtonInstallments();
+    setAmountToPay(`R$ ${paymentAmount.toFixed(2)}`);
+    setModalVisible(false);
+    setButtonDisabled(true);
+  };
 
   const renderModalParcelas = () => {
     return (
@@ -57,7 +89,7 @@ export default function Payment({ navigation }) {
         animationType="slide"
         transparent={true}
         visible={modalVisible}
-        onRequestClose={() => handleShowModal(false)}
+        onRequestClose={() => handleCloseModal()}
       >
         <SafeAreaView style={styles.safeContainerModal}>
           <View style={styles.headerModalContainer}>
@@ -66,7 +98,7 @@ export default function Payment({ navigation }) {
               iconName={"close"}
               iconSize={24}
               iconColor={colors.main800}
-              onPress={() => handleShowModal(false)}
+              onPress={() => handleCloseModal(false)}
             />
           </View>
 
@@ -79,16 +111,28 @@ export default function Payment({ navigation }) {
           <ScrollView contentContainerStyle={styles.scrollView} bounces={false}>
             {paymentSimulationItems?.map((item) => (
               <CardParcelas
+                key={item.installments}
                 installments={item.installments}
                 installmentAmount={item.installmentAmount}
                 onSelect={(value) =>
-                  handleCardPaymentRadioButtonClick(value, true)
+                  handleRadioButtonInstallmentsClick(
+                    value,
+                    false,
+                    item.amountToPay,
+                    item.installmentAmount,
+                    item.installments,
+                    item.fees
+                  )
                 }
-                option={radioButtonOptionCardParcelas}
+                option={radioButtonInstallments}
               />
             ))}
           </ScrollView>
-          <Footer valor={100.0} buttonText={"Continuar"} />
+          <Footer
+            valor={amountToPay}
+            buttonText={"Continuar"}
+            buttonDisabled={buttonDisabled}
+          />
         </SafeAreaView>
       </Modal>
     );
@@ -112,8 +156,8 @@ export default function Payment({ navigation }) {
               key={item.accountId}
               title={"Saldo em conta"}
               subtitle={`Disponível R$ ${item.balance}`}
-              onSelect={(value) => handleCardMenuRadioButtonClick(value, false)}
-              option={radioButtonOptionCardMenu}
+              onSelect={(value) => handleRadioButtonMenuClick(value, false)}
+              option={radioButtonMenu}
             />
           ))}
         </View>
@@ -121,30 +165,31 @@ export default function Payment({ navigation }) {
         <View style={styles.textContainer}>
           <Text style={styles.textCartoes}>Cartões de Crédito</Text>
           {userCards?.map((item) => (
-            <View key={item.name}>
+            <>
               <CardMenu
+                key={item.name}
                 title={item.name}
                 subtitle={item.cardNumber}
                 onSelect={(value) =>
-                  handleCardMenuRadioButtonClick(value, true)
+                  handleRadioButtonMenuClick(value, true)
                 }
-                option={radioButtonOptionCardMenu}
+                option={radioButtonMenu}
               />
-              {radioButtonOptionCardMenu === item.name ? (
+              {radioButtonMenu === item.name ? (
                 <TouchableOpacity
                   style={styles.parcelasContainer}
                   onPress={() => handleShowModal(true)}
                 >
-                  <Text style={styles.textParcelas}>Escolher Parcelas</Text>
+                  <Text style={styles.textParcelas}>{`${cardInstallments}`}</Text>
                   <Icon name="chevron-right" size={18} color={colors.main700} />
                 </TouchableOpacity>
               ) : null}
-            </View>
+            </>
           ))}
         </View>
-      </ScrollView>      
+      </ScrollView>
       <Footer
-        valor={100.0}
+        valor={amountToPay}
         buttonDisabled={buttonDisabled}
         buttonText={"Pagar"}
       />
@@ -154,8 +199,8 @@ export default function Payment({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, 
-    backgroundColor: colors.grey100
+    flex: 1,
+    backgroundColor: colors.grey100,
   },
   textContainer: {
     paddingHorizontal: 16,
@@ -166,14 +211,14 @@ const styles = StyleSheet.create({
   paymentSubtitle: {
     color: colors.black,
     fontSize: 16,
-    fontFamily: "Montserrat-Semibold",
+    fontFamily: "Montserrat-SemiBold",
     lineHeight: 20,
     backgroundColor: colors.grey100,
   },
   textConta: {
     color: colors.lightBlack,
     fontSize: 16,
-    fontFamily: "Montserrat-Semibold",
+    fontFamily: "Montserrat-SemiBold",
     lineHeight: 20,
     backgroundColor: colors.grey100,
     paddingVertical: 12,
@@ -181,7 +226,7 @@ const styles = StyleSheet.create({
   textCartoes: {
     color: colors.lightBlack,
     fontSize: 16,
-    fontFamily: "Montserrat-Semibold",
+    fontFamily: "Montserrat-SemiBold",
     lineHeight: 20,
     backgroundColor: colors.grey100,
     paddingVertical: 12,
@@ -199,11 +244,12 @@ const styles = StyleSheet.create({
   textParcelas: {
     color: colors.main700,
     fontSize: 16,
-    fontFamily: "Montserrat-Semibold",
+    fontFamily: "Montserrat-SemiBold",
     lineHeight: 20,
   },
   scrollView: {
     flexGrow: 1,
+    paddingBottom: 5
   },
   footer: {
     padding: 10,
@@ -236,6 +282,6 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
   },
   textSubtitleModal: {
-    fontSize: 16
-  }
+    fontSize: 16,
+  },
 });
