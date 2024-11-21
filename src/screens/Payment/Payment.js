@@ -23,6 +23,7 @@ import PaymentModal from "../../components/Modal/PaymentModal";
 import Loading from "../../components/Loading/Loading";
 import consts from "../../constants/Consts";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { horizontalScale, moderateScale, verticalScale } from "../../utils/Metrics";
 
 const Payment = () => {
   const route = useRoute();
@@ -359,61 +360,62 @@ const styles = StyleSheet.create({
     backgroundColor: colors.grey100,
   },
   textContainer: {
-    paddingHorizontal: 16,
-    paddingTop: 8,
-    paddingBottom: 16,
+    paddingHorizontal: horizontalScale(16),
+    paddingTop: verticalScale(8),
+    paddingBottom: verticalScale(16),
     backgroundColor: colors.grey100,
   },
   paymentSubtitle: {
     color: colors.black,
-    fontSize: 16,
+    fontSize: moderateScale(16),
     fontFamily: "Montserrat-SemiBold",
-    lineHeight: 20,
+    lineHeight: verticalScale(20),
     backgroundColor: colors.grey100,
   },
   textConta: {
     color: colors.lightBlack,
-    fontSize: 16,
+    fontSize: moderateScale(16),
     fontFamily: "Montserrat-SemiBold",
-    lineHeight: 20,
+    lineHeight: verticalScale(20),
     backgroundColor: colors.grey100,
-    paddingVertical: 12,
+    paddingVertical: verticalScale(12),
   },
   textCartoes: {
     color: colors.lightBlack,
-    fontSize: 16,
+    fontSize: moderateScale(16),
     fontFamily: "Montserrat-SemiBold",
-    lineHeight: 20,
+    lineHeight: verticalScale(20),
     backgroundColor: colors.grey100,
-    paddingVertical: 12,
+    paddingVertical: verticalScale(12),
     textAlign: "center",
   },
   parcelasContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingHorizontal: horizontalScale(16),
+    paddingVertical: verticalScale(12),
     backgroundColor: colors.white,
-    marginVertical: 16,
-    borderRadius: 8,
+    marginVertical: verticalScale(16),
+    borderRadius: moderateScale(8),
   },
   checkContainer: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingHorizontal: horizontalScale(16),
+    paddingVertical: verticalScale(12),
     backgroundColor: colors.white,
   },
   textParcelas: {
     color: colors.main700,
-    fontSize: 16,
+    fontSize: moderateScale(16),
     fontFamily: "Montserrat-SemiBold",
-    lineHeight: 20,
+    lineHeight: verticalScale(20),
   },
   scrollView: {
     flexGrow: 1,
-    paddingBottom: 5,
+    paddingBottom: verticalScale(5),
   },
   footer: {
-    padding: 10,
+    paddingVertical: verticalScale(10),
+    paddingHorizontal: horizontalScale(10),
     justifyContent: "center",
     alignItems: "center",
   },
@@ -422,12 +424,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   separator: {
-    height: 0.5,
-    borderTopWidth: 0.5,
+    height: verticalScale(0.5),
+    borderTopWidth: verticalScale(0.5),
     width: "100%",
     alignSelf: "center",
-    marginTop: 6,
-    marginBottom: 4,
+    marginTop: verticalScale(6),
+    marginBottom: verticalScale(4),
     borderColor: colors.grey700,
   },
 });

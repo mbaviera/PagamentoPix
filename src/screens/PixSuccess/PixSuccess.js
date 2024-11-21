@@ -1,6 +1,8 @@
 import React from "react";
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { horizontalScale, moderateScale, verticalScale } from "../../utils/Metrics";
+import colors from "../../constants/Colors";
 
 const PixSuccess = ({ route, navigation }) => {
   const { name, transferredValue, payedValue, paymentDate } = route.params;
@@ -17,7 +19,7 @@ const PixSuccess = ({ route, navigation }) => {
       <Text style={styles.title}>Pix realizado com sucesso!</Text>
 
       <View style={styles.iconContainer}>
-        <Icon name="check-circle" size={80} color="#00695c" />
+        <Icon name="check-circle" size={80} color={colors.main700} />
       </View>
 
       <View style={styles.infoContainer}>
@@ -52,53 +54,53 @@ const PixSuccess = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
-    paddingHorizontal: 16,
-    paddingTop: 20,
+    backgroundColor: colors.white,
+    paddingHorizontal: horizontalScale(16),
+    paddingTop: verticalScale(20),
     alignItems: "center",
   },
   closeButton: {
     position: "absolute",
-    top: 20,
-    right: 16,
+    top: verticalScale(20),
+    right: horizontalScale(16),
   },
   title: {
-    fontSize: 20,
+    fontSize: moderateScale(20),
     fontWeight: "bold",
-    color: "#000",
-    marginTop: 40,
-    marginBottom: 20,
+    color: colors.grey700,
+    marginTop: verticalScale(40),
+    marginBottom: verticalScale(20),
     textAlign: "center",
   },
   iconContainer: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: "#e0f2f1",
+    width: horizontalScale(100),
+    height: verticalScale(100),
+    borderRadius: moderateScale(50),
+    backgroundColor: colors.main100,
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 20,
+    marginBottom: verticalScale(20),
   },
   infoContainer: {
     width: "100%",
-    paddingVertical: 16,
-    borderRadius: 8,
-    backgroundColor: "#f9f9f9",
-    elevation: 2,
+    paddingVertical: verticalScale(16),
+    borderRadius: moderateScale(8),
+    backgroundColor: colors.grey100,
+    elevation: moderateScale(2),
     alignItems: "center",
   },
   label: {
-    fontSize: 14,
+    fontSize: moderateScale(14),
     fontWeight: "bold",
-    color: "#757575",
-    marginBottom: 4,
+    color: colors.grey700,
+    marginBottom: verticalScale(4),
     textAlign: "center",
   },
   receiver: {
-    fontSize: 16,
+    fontSize: moderateScale(16),
     fontWeight: "bold",
-    color: "#000",
-    marginBottom: 16,
+    color: colors.grey800,
+    marginBottom: verticalScale(16),
     textAlign: "center",
   },
   row: {
@@ -111,10 +113,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   value: {
-    fontSize: 16,
+    fontSize: moderateScale(16),
     fontWeight: "bold",
-    color: "#000",
-    marginTop: 4,
+    color: colors.grey800,
+    marginTop: verticalScale(4),
   },
 });
 

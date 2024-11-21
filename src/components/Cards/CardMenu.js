@@ -2,12 +2,11 @@ import React, { useState } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import colors from "../../constants/Colors";
 import { getBrandLogo } from "../../utils/CommonUtils";
+import { horizontalScale, moderateScale, verticalScale } from "../../utils/Metrics";
 
 const CardMenu = ({ title, subtitle, onSelect, option, brand }) => {
-  const [userOption, setUserOption] = useState("Saldo em conta");
   const selectHandler = (value) => {
     onSelect(value);
-    setUserOption(value);
   };
 
   return (
@@ -33,63 +32,65 @@ const CardMenu = ({ title, subtitle, onSelect, option, brand }) => {
 const styles = StyleSheet.create({
   cardContainer: {
     flexDirection: "row",
-    paddingVertical: 12,
-    paddingLeft: 16,
-    paddingRight: 8,
+    paddingVertical: verticalScale(12),
+    paddingLeft: horizontalScale(16),
+    paddingRight: horizontalScale(8),
     backgroundColor: colors.white,
-    borderRadius: 6,
-    elevation: 6,
-    marginTop: 8,
+    borderRadius: moderateScale(6),
+    elevation: moderateScale(6),
+    marginTop: verticalScale(8),
     alignItems: "center",
   },
   textContainer: {
     flexDirection: "column",
-    marginLeft: 10,
+    marginLeft: horizontalScale(10),
   },
   titleStyle: {
     color: colors.main700,
-    fontSize: 16,
+    fontSize: moderateScale(16),
     fontFamily: "Montserrat-SemiBold",
-    lineHeight: 20,
+    lineHeight: verticalScale(20),
     backgroundColor: colors.white,
   },
   subtitleStyle: {
     color: colors.grey700,
-    fontSize: 12,
+    fontSize: moderateScale(12),
     fontFamily: "Montserrat-Regular",
-    lineHeight: 20,
+    lineHeight: verticalScale(20),
     backgroundColor: colors.white,
-    marginTop: 6
+    marginTop: verticalScale(6)
   },
   containerButton: {
     borderColor: colors.main700,
-    borderRadius: 50,
-    borderWidth: 2,
-    width: 28,
-    height: 28,
+    borderRadius: moderateScale(50),
+    borderWidth: horizontalScale(2),
+    width: horizontalScale(28),
+    height: verticalScale(28),
     justifyContent: "center",
     alignItems: "center",
   },
   unselected: {
-    width: 24,
-    height: 24,
+    width: horizontalScale(24),
+    height: verticalScale(24),
     backgroundColor: colors.white,
-    margin: 5,
-    borderRadius: 50,
+    marginVertical: horizontalScale(5),
+    marginHorizontal: verticalScale(5),
+    borderRadius: moderateScale(50),
   },
   selected: {
-    width: 24,
-    height: 24,
+    width: horizontalScale(24),
+    height: verticalScale(24),
     backgroundColor: colors.main700,
-    margin: 5,
-    borderRadius: 50,
+    marginVertical: horizontalScale(5),
+    marginHorizontal: verticalScale(5),
+    borderRadius: moderateScale(50),
     borderWidth: 2,
     borderColor: colors.white,
   },
   brandImage: {
-    width: 40,
-    height: 20,
-    marginRight: 4
+    width: horizontalScale(40),
+    height: verticalScale(20),
+    marginRight: horizontalScale(4)
   },
 });
 

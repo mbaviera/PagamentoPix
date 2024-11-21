@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import colors from "../../constants/Colors";
+import { horizontalScale, moderateScale, verticalScale } from "../../utils/Metrics";
 
 const Footer = ({ valor, buttonDisabled, buttonText, onPress }) => {
   return (
@@ -30,31 +31,30 @@ const Footer = ({ valor, buttonDisabled, buttonText, onPress }) => {
 
 const styles = StyleSheet.create({
   footerContainer: {
-    padding: 10,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: colors.white,
     justifyContent: "space-between",
     flexDirection: "row",
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-    elevation: 20,
+    paddingHorizontal: horizontalScale(16),
+    paddingVertical: verticalScale(16),
+    elevation: moderateScale(20),
   },
   payButton: {
-    paddingHorizontal: 16,
-    paddingTop: 7,
-    paddingBottom: 8,
-    borderRadius: 100,
+    paddingHorizontal: horizontalScale(16),
+    paddingTop: verticalScale(7),
+    paddingBottom: verticalScale(8),
+    borderRadius: moderateScale(100),
   },
   textTitle: {
-    marginBottom: 2,
+    marginBottom: verticalScale(2),
     fontFamily: "Montserrat-Regular",
-    fontSize: 14,
+    fontSize: moderateScale(14),
   },
   textSubtitle: {
-    marginTop: 2,
+    marginTop: verticalScale(2),
     fontFamily: "Montserrat-Bold",
-    fontSize: 18,
+    fontSize: moderateScale(18),
   },
   textButtonContinuar: {
     textAlign: "center",

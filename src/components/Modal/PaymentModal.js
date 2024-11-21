@@ -11,6 +11,7 @@ import colors from "../../constants/Colors";
 import CardParcelas from "../Cards/CardParcelas";
 import Footer from "../Footer/Footer";
 import RoundedButton from "../Button/RoundedButton";
+import { horizontalScale, moderateScale, verticalScale } from "../../utils/Metrics";
 
 const PaymentModal = ({
   visible,
@@ -70,34 +71,34 @@ const styles = StyleSheet.create({
   safeContainerModal: {
     flex: 1,
     backgroundColor: colors.white,
-    marginTop: 80,
-    elevation: 5,
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,    
+    marginTop: verticalScale(80),
+    elevation: moderateScale(5),
+    borderTopLeftRadius: horizontalScale(12),
+    borderTopRightRadius: horizontalScale(12),    
   },
   headerModalContainer: {
     flexDirection: "row",
-    paddingHorizontal: 16,
+    paddingHorizontal: horizontalScale(16),
     justifyContent: "space-between",
-    paddingTop: 8,
-    paddingBottom: 16,
-    marginTop: 25,
+    paddingTop: verticalScale(8),
+    paddingBottom: verticalScale(16),
+    marginTop: verticalScale(25),
   },
   textTitleModal: {
-    fontSize: 24,
+    fontSize: moderateScale(24),
   },
   subTitleModalContainer: {
     flexDirection: "row",
-    paddingHorizontal: 16,
+    paddingHorizontal: horizontalScale(16),
     justifyContent: "space-between",
-    paddingBottom: 16,
+    paddingBottom: verticalScale(16),
   },
   textSubtitleModal: {
-    fontSize: 16,
+    fontSize: moderateScale(16),
   },
   scrollView: {
     flexGrow: 1,
-    paddingBottom: 5,
+    paddingBottom: verticalScale(5),
   },
 });
 

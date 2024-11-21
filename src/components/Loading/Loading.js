@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
+import { moderateScale, verticalScale } from "../../utils/Metrics";
 
 const Loading = ({ text }) => {
   return (
@@ -18,10 +19,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   loader: {
-    marginBottom: 16, // Espaço entre o indicador e o texto
+    marginBottom: verticalScale(16), // Espaço entre o indicador e o texto
   },
   text: {
-    fontSize: 18,
+    fontSize: moderateScale(18),
     fontWeight: "bold",
     color: "#ffffff",
     textAlign: "center",

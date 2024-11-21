@@ -2,6 +2,11 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import RoundedButton from "../Button/RoundedButton";
 import colors from "../../constants/Colors";
+import {
+  horizontalScale,
+  moderateScale,
+  verticalScale,
+} from "../../utils/Metrics";
 
 const Header = ({ titleHeader }) => {
   return (
@@ -20,23 +25,23 @@ const Header = ({ titleHeader }) => {
 
 const styles = StyleSheet.create({
   headerContainer: {
-    paddingHorizontal: 16,
-    paddingTop: 8,
-    paddingBottom: 16,
+    paddingHorizontal: horizontalScale(16),
+    paddingTop: verticalScale(8),
+    paddingBottom: verticalScale(16),
     backgroundColor: colors.grey100,
   },
   contentArea: {
     flexDirection: "row",
     justifyContent: "space-between",
-    height: 32,
-    marginBottom: 24,
+    height: verticalScale(32),
+    marginBottom: verticalScale(24),
     backgroundColor: colors.grey100,
   },
   textTitle: {
     color: colors.grey800,
-    fontSize: 24,
+    fontSize: moderateScale(24),
     fontFamily: "Montserrat-Bold",
-    lineHeight: 28,
+    lineHeight: verticalScale(24),
     backgroundColor: colors.grey100,
   },
 });
