@@ -501,7 +501,7 @@
 				DEVELOPMENT_TEAM = DMFDDFPC36;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = PagamentoPix/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = PagamentoPix;
+				INFOPLIST_KEY_CFBundleDisplayName = Pix;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -530,7 +530,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = DMFDDFPC36;
 				INFOPLIST_FILE = PagamentoPix/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = PagamentoPix;
+				INFOPLIST_KEY_CFBundleDisplayName = Pix;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
