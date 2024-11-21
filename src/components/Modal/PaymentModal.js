@@ -47,8 +47,8 @@ const PaymentModal = ({
             <CardParcelas
               key={item.installments}
               installments={item.installments}
-              installmentAmount={item.installmentAmount}
-              onSelect={(value) => onSelect(value, false, item)}
+              installmentAmount={item.installmentAmount?.toFixed(2)}
+              onSelect={(value) => onSelect(value, false, item, item.fees)}
               option={radioButtonInstallments}
             />
           ))}

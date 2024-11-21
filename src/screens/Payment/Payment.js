@@ -33,6 +33,10 @@ const Payment = ({ navigation }) => {
     receiverName: paymentInitialData.name, //nome de quem esta recebendo o pix
     amountToPay: formatCurrency(paymentInitialData.amount),
     totalAmountToPay: formatCurrency(paymentInitialData.amount),
+    cardFee: null, //taxa do cartao de credito
+    cardFeeSelected: null, //taxa do cartao de credito
+    installmentsFee: null, //taxa das parcelas
+    installmentsFeeSelected: null, //taxa das parcelas
   });
 
   //estados usados para controle de funcionalidades
@@ -83,12 +87,14 @@ const Payment = ({ navigation }) => {
 
   //funcao de select dos botoes radio das parcelas de pagamento
   const handleInstallmentsSelection = useCallback(
-    (value, buttonDisabled, item) => {
+    (value, buttonDisabled, item, fees) => {
       setPaymentState((prev) => ({
         ...prev,
-        amountToPay: `${
-          item.installments
-        }x de ${formatCurrency(item.installmentAmount)}`,
+        amountToPay: `${item.installments}x de ${formatCurrency(
+          item.installmentAmount
+        )}`,
+        cardFee: fees.fixedAmount,
+        installmentsFee: fees.installmentAmount,
       }));
 
       setControllerState((prev) => ({
@@ -100,28 +106,13 @@ const Payment = ({ navigation }) => {
     []
   );
 
-  //funcao para definir os valores iniciais
-  const setDataToInitialValue = () => {
-    setPaymentState((prev) => ({
-      ...prev,
-      amountToPay: formatCurrency(paymentState.paymentAmount),
-      totalAmountToPay: formatCurrency(paymentState.paymentAmount),
-    }));
-
-    setControllerState((prev) => ({
-      ...prev,
-      cardInstallments: consts.escolherParcelas,
-      showCheckCard: false,
-      radioInstallments: null,
-      radioInstallmentsController: null,
-    }));
-  };
-
   //funcao de controle do botao de continuar dentro do modal com as listas de parcelas
   const handleContinueButton = () => {
     setPaymentState((prev) => ({
       ...prev,
       totalAmountToPay: paymentState.amountToPay,
+      cardFeeSelected: paymentState.cardFee,
+      installmentsFeeSelected: paymentState.installmentsFee,
     }));
 
     setControllerState((prev) => ({
@@ -141,13 +132,32 @@ const Payment = ({ navigation }) => {
     }));
 
     //timeout adicionado apenas para fins de exibicao da tela de loading
-    setTimeout(() => {      
+    setTimeout(() => {
       setControllerState((prev) => ({
         ...prev,
         processPayment: false,
       }));
       navigation.navigate("PixSuccess");
     }, 1000);
+  };
+
+  //funcao para definir os valores iniciais
+  const setDataToInitialValue = () => {
+    setPaymentState((prev) => ({
+      ...prev,
+      amountToPay: formatCurrency(paymentState.paymentAmount),
+      totalAmountToPay: formatCurrency(paymentState.paymentAmount),
+      cardFeeSelected: null,
+      installmentsFeeSelected: null,
+    }));
+
+    setControllerState((prev) => ({
+      ...prev,
+      cardInstallments: consts.escolherParcelas,
+      showCheckCard: false,
+      radioInstallments: null,
+      radioInstallmentsController: null,
+    }));
   };
 
   //funcao de controle para mostrar o modal com as parcelas de pagamento
@@ -272,16 +282,27 @@ const Payment = ({ navigation }) => {
                     <View style={styles.checkContainer}>
                       <View style={styles.checkRow}>
                         <Text>Valor a transferir</Text>
-                        <Text>{`${formatCurrency(paymentState.paymentAmount)}`}</Text>
+                        <Text>{`${formatCurrency(
+                          paymentState.paymentAmount
+                        )}`}</Text>
                       </View>
                       <View style={styles.checkRow}>
                         <Text>Taxa do cartão</Text>
-                        <Text>100</Text>
+                        <Text>
+                          {paymentState.cardFeeSelected != null
+                            ? `R$ ${paymentState.cardFeeSelected.toFixed(2)}`
+                            : "-"}
+                        </Text>
                       </View>
                       <View style={styles.checkRow}>
                         <Text>Taxa de parcelamento</Text>
-                        <Text>-</Text>
+                        <Text>
+                          {paymentState.installmentsFeeSelected != null
+                            ? `R$ ${paymentState.installmentsFeeSelected.toFixed(2)}`
+                            : "-"}
+                        </Text>
                       </View>
+                      <View style={styles.separator} />
                       <View style={styles.checkRow}>
                         <Text>Valor a transferir + taxas</Text>
                         <Text>{paymentState.totalAmountToPay}</Text>
@@ -371,6 +392,15 @@ const styles = StyleSheet.create({
   checkRow: {
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  separator: {
+    height: 0.5,
+    borderTopWidth: 0.5,
+    width: "100%",
+    alignSelf: "center",
+    marginTop: 6,
+    marginBottom: 4,
+    borderColor: colors.grey700,
   },
 });
 
