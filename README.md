@@ -54,6 +54,8 @@ Tecnologias utilizadas no desenvolvimento do projeto
 * Javascript - Linguagem de progamação utilizada
 * react-navigation - Lib utilizada para navegação entre telas
 * react-native-bootsplash - Lib utilizada para criação de splash screen
+* Git - Sistema de controle de versão utilizado
+* GitHub - Repositorio utilizado para armezenamento
 
 ## ✒️ Autores
 
