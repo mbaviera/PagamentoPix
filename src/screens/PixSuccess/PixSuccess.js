@@ -1,13 +1,15 @@
 import React from "react";
-import { StyleSheet, Text, View, Pressable } from "react-native";
+import { StyleSheet, Text, View, Pressable, Platform } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import {
   horizontalScale,
   moderateScale,
   verticalScale,
 } from "../../utils/Metrics";
-import colors from "../../constants/Colors";
+import colors from "../../style/Colors";
 import RoundedButton from "../../components/Button/RoundedButton";
+import consts from "../../constants/Consts";
+import ResultRow from "../../components/Text/ResultRow";
 
 const PixSuccess = ({ route, navigation }) => {
   const { name, transferredValue, payedValue, paymentDate } = route.params;
@@ -17,16 +19,16 @@ const PixSuccess = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Pressable style={styles.closeButton} onPress={handleClose}>
+      <View style={styles.closeButton} onPress={handleClose}>
         <RoundedButton
           iconName={"close"}
           iconSize={24}
           iconColor={colors.main800}
           onPress={handleClose}
         />
-      </Pressable>
+      </View>
 
-      <Text style={styles.title}>Pix realizado com sucesso!</Text>
+      <Text style={styles.title}>{consts.pixSucesso}</Text>
 
       <View style={styles.iconContainer}>
         <Icon name="check-circle" size={80} color={colors.main700} />
@@ -34,27 +36,16 @@ const PixSuccess = ({ route, navigation }) => {
 
       <View style={styles.infoContainer}>
         <View style={styles.row}>
-          <View style={styles.column}>
-            <Text style={styles.label}>Para</Text>
-            <Text style={styles.receiver}>{name}</Text>
-          </View>
-
-          <View style={styles.column}>
-            <Text style={styles.label}>Data</Text>
-            <Text style={styles.value}>{paymentDate}</Text>
-          </View>
+          <ResultRow title={consts.para} subtitle={name} />
+          <ResultRow title={consts.data} subtitle={paymentDate} />
         </View>
 
         <View style={styles.row}>
-          <View style={styles.column}>
-            <Text style={styles.label}>Valor Transferido</Text>
-            <Text style={styles.value}>R$ {transferredValue.toFixed(2)}</Text>
-          </View>
-
-          <View style={styles.column}>
-            <Text style={styles.label}>Valor Pago</Text>
-            <Text style={styles.value}>{payedValue}</Text>
-          </View>
+          <ResultRow
+            title={consts.valorTransferido}
+            subtitle={`R$ ${transferredValue.toFixed(2)}`}
+          />
+          <ResultRow title={consts.valorPago} subtitle={payedValue} />
         </View>
       </View>
     </View>
@@ -66,7 +57,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white,
     paddingHorizontal: horizontalScale(16),
-    paddingTop: verticalScale(50),
+    paddingTop: Platform.OS === 'ios' ? verticalScale(50) : verticalScale(10),
     alignItems: "center",
   },
   closeButton: {
@@ -98,40 +89,20 @@ const styles = StyleSheet.create({
     backgroundColor: colors.grey100,
     elevation: moderateScale(2),
     alignItems: "center",
-    //pra ios
-    shadowColor: 'gray',
-    shadowOffset: {width: horizontalScale(0), height: verticalScale(2)},
-    shadowOpacity: 0.5,
-    shadowRadius: moderateScale(2),
-  },
-  label: {
-    fontSize: moderateScale(14),
-    fontWeight: "bold",
-    color: colors.grey700,
-    marginBottom: verticalScale(4),
-    textAlign: "center",
-  },
-  receiver: {
-    fontSize: moderateScale(16),
-    fontWeight: "bold",
-    color: colors.grey800,
-    marginBottom: verticalScale(16),
-    textAlign: "center",
+    ...Platform.select({
+      ios: {
+        shadowColor: colors.grey700,
+        shadowOffset: { width: horizontalScale(0), height: verticalScale(2) },
+        shadowOpacity: 0.5,
+        shadowRadius: moderateScale(2),
+      },
+    }),
   },
   row: {
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
-  },
-  column: {
-    alignItems: "center",
-    flex: 1,
-  },
-  value: {
-    fontSize: moderateScale(16),
-    fontWeight: "bold",
-    color: colors.grey800,
-    marginTop: verticalScale(4),
+    marginBlock: 8,
   },
 });
 

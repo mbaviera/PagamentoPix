@@ -1,29 +1,17 @@
-import React, { useState } from "react";
-import { View, Text, Pressable, StyleSheet } from "react-native";
-import colors from "../../constants/Colors";
+import React from "react";
+import { View, Pressable, StyleSheet } from "react-native";
+import colors from "../../style/Colors";
 
-export default function RadioButton({ data, onSelect }) {
-  const [userOption, setUserOption] = useState(null);
-  const selectHandler = (value) => {
-    onSelect(value);
-    setUserOption(value);
-  };
+const RadioButton = ({ isSelected, onPress }) => {
   return (
-    <View>
-      {data.map((item) => {
-        return (
-          <View style={styles.containerButton}>
-            <Pressable
-              style={
-                item.value === userOption ? styles.selected : styles.unselected
-              }
-              onPress={() => selectHandler(item.value)}
-            >
-              {/* <Text style={styles.option}>{item.value}</Text> */}
-            </Pressable>
-          </View>
-        );
-      })}
+    <View style={styles.containerButton}>
+      <Pressable
+        style={({ pressed }) => [
+          isSelected ? styles.selected : styles.unselected,
+          pressed && styles.pressed,
+        ]}
+        onPress={onPress}
+      />
     </View>
   );
 }
@@ -60,3 +48,5 @@ const styles = StyleSheet.create({
     borderColor: colors.white,
   },
 });
+
+export default RadioButton;

@@ -14,7 +14,11 @@ const colors = {
     red: '#E30E17',
     orange: '#EA600A',
     yellow: '#F59F00',
-    grey: '#9D9B9B'
+    grey: '#9D9B9B',
+    
+    blueGreen100: '#00bfa5',
+    blueGreen200: '#00695c',
+
 };
 
 export default colors;

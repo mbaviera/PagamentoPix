@@ -1,33 +1,39 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import colors from "../../constants/Colors";
-import { horizontalScale, moderateScale, verticalScale } from "../../utils/Metrics";
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import colors from "../../style/Colors";
+import {
+  horizontalScale,
+  moderateScale,
+  verticalScale,
+} from "../../utils/Metrics";
+import ActionButton from "../Button/ActionButton";
+import consts from "../../constants/Consts";
 
 const Footer = ({ valor, buttonDisabled, buttonText, onPress }) => {
   return (
     <View style={styles.footerContainer}>
-      <View style={{ flexDirection: "column" }}>
-        <Text style={styles.textTitle}>{`Valor a ser pago`}</Text>
-        <Text style={styles.textSubtitle}>{`${valor}`}</Text>
-      </View>
-
-      <View style={{ justifyContent: "center" }}>
-        <TouchableOpacity
-          style={[
-            styles.payButton,
-            {
-              backgroundColor: buttonDisabled ? colors.grey : colors.main700,
-            },
-          ]}
-          disabled={buttonDisabled}
-          onPress={onPress}
-        >
-          <Text style={styles.textButtonContinuar}>{`${buttonText}`}</Text>
-        </TouchableOpacity>
-      </View>
+      <PaymentInfo valor={valor} />
+      <ActionButton
+        buttonDisabled={buttonDisabled}
+        buttonText={buttonText}
+        onPress={onPress}
+      />
     </View>
   );
 };
+
+const PaymentInfo = ({ valor }) => (
+  <View style={styles.paymentInfoContainer}>
+    <Text style={styles.textTitle}>{consts.valorSerPago}</Text>
+    <Text style={styles.textSubtitle}>{valor}</Text>
+  </View>
+);
 
 const styles = StyleSheet.create({
   footerContainer: {
@@ -39,18 +45,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(16),
     paddingVertical: verticalScale(16),
     elevation: moderateScale(20),
-    //pra ios
-    shadowColor: 'gray',
-    shadowOffset: {width: horizontalScale(1), height: verticalScale(1)},
-    shadowOpacity: 0.5,
-    shadowRadius: moderateScale(1),
+    ...Platform.select({
+      ios: {
+        shadowColor: colors.grey700,
+        shadowOffset: { width: horizontalScale(1), height: verticalScale(1) },
+        shadowOpacity: 0.5,
+        shadowRadius: moderateScale(1),
+      },
+    }),
   },
-  payButton: {
-    paddingHorizontal: horizontalScale(16),
-    paddingTop: verticalScale(7),
-    paddingBottom: verticalScale(8),
-    borderRadius: moderateScale(100),
-  },
+
   textTitle: {
     marginBottom: verticalScale(2),
     fontFamily: "Montserrat-Regular",
@@ -60,10 +64,6 @@ const styles = StyleSheet.create({
     marginTop: verticalScale(2),
     fontFamily: "Montserrat-Bold",
     fontSize: moderateScale(18),
-  },
-  textButtonContinuar: {
-    textAlign: "center",
-    color: colors.white,
   },
 });
 

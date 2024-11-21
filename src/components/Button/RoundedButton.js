@@ -1,7 +1,7 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
-import colors from "../../constants/Colors";
+import colors from "../../style/Colors";
 import { horizontalScale, moderateScale, verticalScale } from "../../utils/Metrics";
 
 const RoundButton = ({ iconName, iconSize, iconColor, onPress }) => {

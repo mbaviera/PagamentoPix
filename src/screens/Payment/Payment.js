@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import Header from "../../components/Header/Header";
-import colors from "../../constants/Colors";
+import colors from "../../style/Colors";
 import CardMenu from "../../components/Cards/CardMenu";
 import {
   getUserAccount,
@@ -23,7 +23,13 @@ import PaymentModal from "../../components/Modal/PaymentModal";
 import Loading from "../../components/Loading/Loading";
 import consts from "../../constants/Consts";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { horizontalScale, moderateScale, verticalScale } from "../../utils/Metrics";
+import {
+  horizontalScale,
+  moderateScale,
+  verticalScale,
+} from "../../utils/Metrics";
+import InfoRow from "../../components/Text/InfoRow";
+import Separator from "../../components/Separator/Separator";
 
 const Payment = () => {
   const route = useRoute();
@@ -69,12 +75,21 @@ const Payment = () => {
         const paymentInfoData = getPaymentInfo();
         const simulationData = getPaymentSimulationItems();
 
+        if (!Array.isArray(accountData) || accountData.length === 0) {
+          throw new Error("Dados de conta inválidos ou inexistentes.");
+        }
+
+        if (!Array.isArray(cardsData) || cardsData.length === 0) {
+          throw new Error("Nenhum cartão cadastrado.");
+        }
+
         setUserAccount(accountData);
         setUserCards(cardsData);
         setPaymentInfo(paymentInfoData);
         setPaymentSimulationItems(simulationData);
       } catch (error) {
         console.error(consts.erroBuscarDados, error);
+        setUserAccount(null);
       }
     };
     fetchData();
@@ -82,23 +97,23 @@ const Payment = () => {
 
   useEffect(() => {
     if (route.params?.resetData) {
-      setDataToInitialValue();      
-      navigation.setParams({ resetData: null });// Reseta o parametro para evitar loops
+      resetToInitialState();
+      navigation.setParams({ resetData: null }); // Reseta o parametro para evitar loops
     }
   }, [route.params?.resetData]);
 
   //funcao de select dos botoes radio da tela de menu
-  const handleMenuSelection = useCallback((value, buttonDisabled) => {
+  const selectPaymentOption = useCallback((value, buttonDisabled) => {
     setControllerState((prev) => ({
       ...prev,
       radioMenu: value,
       buttonDisabled,
     }));
-    setDataToInitialValue();
+    resetToInitialState();
   }, []);
 
   //funcao de select dos botoes radio das parcelas de pagamento
-  const handleInstallmentsSelection = useCallback(
+  const selectInstallmentsOption = useCallback(
     (value, buttonDisabled, item, fees) => {
       setPaymentState((prev) => ({
         ...prev,
@@ -159,17 +174,17 @@ const Payment = () => {
     }, 1000);
   };
 
-  const getCurrentDate = () => {
+  const getCurrentDate = useCallback(() => {
     const today = new Date();
     const day = String(today.getDate()).padStart(2, "0"); // Garantir 2 dígitos
     const month = String(today.getMonth() + 1).padStart(2, "0"); // Meses começam em 0
     const year = today.getFullYear();
 
     return `${day}/${month}/${year}`;
-  };
+  }, []);
 
   //funcao para definir os valores iniciais
-  const setDataToInitialValue = () => {
+  const resetToInitialState = () => {
     setPaymentState((prev) => ({
       ...prev,
       amountToPay: formatCurrency(paymentState.paymentAmount),
@@ -200,6 +215,11 @@ const Payment = () => {
       modalVisible,
     }));
 
+    disableButtonIfNecessary();
+  };
+
+  //desabilitar o botao de acao de pagar e continuar
+  const disableButtonIfNecessary = () => {
     if (!controllerState.showCheckCard) {
       setControllerState((prev) => ({
         ...prev,
@@ -229,9 +249,15 @@ const Payment = () => {
     }
   };
 
-  //estado de erro pra carregar os dados da conta do usuario
+  //mensagem de erro caso nao consiga carregar os dados do usuario
   if (!userAccount) {
-    return <Loading text={consts.carregandoDados} />;
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorMessage}>
+          Não foi possível carregar os dados. Tente novamente mais tarde.
+        </Text>
+      </View>
+    );
   }
 
   //loading pra exibir durante o processo de pagamento
@@ -246,7 +272,7 @@ const Payment = () => {
         visible={controllerState.modalVisible}
         onClose={closePaymentModal}
         paymentSimulationItems={paymentSimulationItems}
-        onSelect={handleInstallmentsSelection}
+        onSelect={selectInstallmentsOption}
         amountToPay={paymentState.amountToPay}
         buttonDisabled={controllerState.buttonDisabled}
         onContinue={handleContinueButton}
@@ -258,35 +284,35 @@ const Payment = () => {
   return (
     <SafeAreaView style={styles.container}>
       {renderInstallmentsModal()}
-      <Header titleHeader={"Transferência Pix"} />
+      <Header titleHeader={consts.transferenciaPix} />
       <View style={styles.textContainer}>
         <Text style={styles.paymentSubtitle}>
-          Escolha uma forma de pagamento
+          {consts.escolhaFormaPagamento}
         </Text>
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollView} bounces={false}>
         <View style={styles.textContainer}>
-          <Text style={styles.textConta}>Conta Midway</Text>
+          <Text style={styles.textConta}>{consts.contaMidway}</Text>
           {userAccount?.map((item) => (
             <CardMenu
               key={item.accountId}
               title={consts.saldoEmConta}
-              subtitle={`Disponível: ${formatCurrency(item.balance)}`}
-              onSelect={(value) => handleMenuSelection(value, false)}
+              subtitle={`${consts.disponivel}: ${formatCurrency(item.balance)}`}
+              onSelect={(value) => selectPaymentOption(value, false)}
               option={controllerState.radioMenu}
             />
           ))}
         </View>
 
         <View style={styles.textContainer}>
-          <Text style={styles.textCartoes}>Cartões de Crédito</Text>
+          <Text style={styles.textCartoes}>{consts.cartoesCredito}</Text>
           {userCards?.map((item) => (
             <View key={item.name}>
               <CardMenu
                 title={item.name}
                 subtitle={item.cardNumber}
-                onSelect={(value) => handleMenuSelection(value, true)}
+                onSelect={(value) => selectPaymentOption(value, true)}
                 option={controllerState.radioMenu}
                 brand={item.brand}
               />
@@ -307,35 +333,39 @@ const Payment = () => {
                   </TouchableOpacity>
                   {controllerState.showCheckCard ? (
                     <View style={styles.checkContainer}>
-                      <View style={styles.checkRow}>
-                        <Text>Valor a transferir</Text>
-                        <Text>{`${formatCurrency(
+                      <InfoRow
+                        title={consts.valorTransferir}
+                        subtitle={`${formatCurrency(
                           paymentState.paymentAmount
-                        )}`}</Text>
-                      </View>
-                      <View style={styles.checkRow}>
-                        <Text>Taxa do cartão</Text>
-                        <Text>
-                          {paymentState.cardFeeSelected != null
+                        )}`}
+                      />
+
+                      <InfoRow
+                        title={consts.taxaCartao}
+                        subtitle={
+                          paymentState.cardFeeSelected != null
                             ? `R$ ${paymentState.cardFeeSelected.toFixed(2)}`
-                            : "-"}
-                        </Text>
-                      </View>
-                      <View style={styles.checkRow}>
-                        <Text>Taxa de parcelamento</Text>
-                        <Text>
-                          {paymentState.installmentsFeeSelected != null
+                            : "-"
+                        }
+                      />
+
+                      <InfoRow
+                        title={consts.taxaParcelamento}
+                        subtitle={
+                          paymentState.installmentsFeeSelected != null
                             ? `R$ ${paymentState.installmentsFeeSelected.toFixed(
                                 2
                               )}`
-                            : "-"}
-                        </Text>
-                      </View>
-                      <View style={styles.separator} />
-                      <View style={styles.checkRow}>
-                        <Text>Valor a transferir + taxas</Text>
-                        <Text>{paymentState.totalAmountToPay}</Text>
-                      </View>
+                            : "-"
+                        }
+                      />
+
+                      <Separator />
+
+                      <InfoRow
+                        title={`${consts.valorTransferir} + ${consts.taxas}`}
+                        subtitle={paymentState.totalAmountToPay}
+                      />
                     </View>
                   ) : null}
                 </>
@@ -413,24 +443,15 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingBottom: verticalScale(5),
   },
-  footer: {
-    paddingVertical: verticalScale(10),
-    paddingHorizontal: horizontalScale(10),
+  errorContainer: {
+    flex: 1,
     justifyContent: "center",
-    alignItems: "center",
   },
-  checkRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  separator: {
-    height: verticalScale(0.5),
-    borderTopWidth: verticalScale(0.5),
-    width: "100%",
-    alignSelf: "center",
-    marginTop: verticalScale(6),
-    marginBottom: verticalScale(4),
-    borderColor: colors.grey700,
+  errorMessage: {
+    color: colors.main700,
+    fontSize: moderateScale(16),
+    fontFamily: "Montserrat-SemiBold",
+    textAlign: "center",
   },
 });
 

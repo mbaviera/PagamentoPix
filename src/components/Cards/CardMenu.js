@@ -1,33 +1,51 @@
-import React, { useState } from "react";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import colors from "../../constants/Colors";
+import React, { useCallback } from "react";
+import {
+  Image,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import colors from "../../style/Colors";
 import { getBrandLogo } from "../../utils/CommonUtils";
-import { horizontalScale, moderateScale, verticalScale } from "../../utils/Metrics";
+import {
+  horizontalScale,
+  moderateScale,
+  verticalScale,
+} from "../../utils/Metrics";
+import RadioButton from "../Button/RadioButton";
 
 const CardMenu = ({ title, subtitle, onSelect, option, brand }) => {
-  const selectHandler = (value) => {
-    onSelect(value);
-  };
+  const selectHandler = useCallback(() => {
+    onSelect(title);
+  }, [onSelect, title]);
 
   return (
     <View style={styles.cardContainer}>
-      <View style={styles.containerButton}>
-        <Pressable
-          style={title === option ? styles.selected : styles.unselected}
-          onPress={() => selectHandler(title)}
-        />
-      </View>
-
-      <View style={styles.textContainer}>
-        <View style={{ flexDirection: 'row' }}>
-          {brand && <Image source={getBrandLogo(brand)} style={styles.brandImage} resizeMode="contain"/>}
-          <Text style={styles.titleStyle}>{`${title}`}</Text>
-        </View>
-        <Text style={styles.subtitleStyle}>{`${subtitle}`}</Text>
-      </View>
+      <RadioButton
+        isSelected={title === option}
+        onPress={() => selectHandler(title)}
+      />
+      <Content title={title} subtitle={subtitle} brand={brand} />
     </View>
   );
 };
+
+const Content = ({ title, subtitle, brand }) => (
+  <View style={styles.textContainer}>
+    <View style={styles.rowContainer}>
+      {brand && (
+        <Image
+          source={getBrandLogo(brand)}
+          style={styles.brandImage}
+          resizeMode="contain"
+        />
+      )}
+      <Text style={styles.titleStyle}>{title}</Text>
+    </View>
+    <Text style={styles.subtitleStyle}>{subtitle}</Text>
+  </View>
+);
 
 const styles = StyleSheet.create({
   cardContainer: {
@@ -40,11 +58,14 @@ const styles = StyleSheet.create({
     elevation: moderateScale(6),
     marginTop: verticalScale(8),
     alignItems: "center",
-    //pra ios
-    shadowColor: 'gray',
-    shadowOffset: {width: horizontalScale(0), height: verticalScale(2)},
-    shadowOpacity: 0.5,
-    shadowRadius: moderateScale(2),
+    ...Platform.select({
+      ios: {
+        shadowColor: colors.grey700,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.5,
+        shadowRadius: moderateScale(2),
+      },
+    }),
   },
   textContainer: {
     flexDirection: "column",
@@ -63,40 +84,16 @@ const styles = StyleSheet.create({
     fontFamily: "Montserrat-Regular",
     lineHeight: verticalScale(20),
     backgroundColor: colors.white,
-    marginTop: verticalScale(6)
-  },
-  containerButton: {
-    borderColor: colors.main700,
-    borderRadius: moderateScale(50),
-    borderWidth: horizontalScale(2),
-    width: horizontalScale(28),
-    height: verticalScale(28),
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  unselected: {
-    width: horizontalScale(24),
-    height: verticalScale(24),
-    backgroundColor: colors.white,
-    marginVertical: horizontalScale(5),
-    marginHorizontal: verticalScale(5),
-    borderRadius: moderateScale(50),
-  },
-  selected: {
-    width: horizontalScale(24),
-    height: verticalScale(24),
-    backgroundColor: colors.main700,
-    marginVertical: horizontalScale(5),
-    marginHorizontal: verticalScale(5),
-    borderRadius: moderateScale(50),
-    borderWidth: 2,
-    borderColor: colors.white,
+    marginTop: verticalScale(6),
   },
   brandImage: {
     width: horizontalScale(40),
     height: verticalScale(20),
-    marginRight: horizontalScale(4)
+    marginRight: horizontalScale(4),
   },
+  rowContainer: {
+    flexDirection: "row",
+  }
 });
 
 export default CardMenu;

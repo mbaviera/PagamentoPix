@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Navigation from "./src/navigation/Navigation";
 import BootSplash from "react-native-bootsplash";
 import { StatusBar } from "react-native";
-import colors from "./src/constants/Colors";
+import colors from "./src/style/Colors";
 
 export default function App() {
   useEffect(() => {

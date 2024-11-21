@@ -1,7 +1,12 @@
-import React, { useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import colors from "../../constants/Colors";
-import { horizontalScale, moderateScale, verticalScale } from "../../utils/Metrics";
+import React, { useCallback } from "react";
+import { Platform, StyleSheet, Text, View } from "react-native";
+import colors from "../../style/Colors";
+import {
+  horizontalScale,
+  moderateScale,
+  verticalScale,
+} from "../../utils/Metrics";
+import RadioButton from "../Button/RadioButton";
 
 const CardParcelas = ({
   installments,
@@ -9,25 +14,32 @@ const CardParcelas = ({
   onSelect,
   option,
 }) => {
-  const handleSelect = () => onSelect(installments);
+  const handleSelect = useCallback(() => {
+    onSelect(installments);
+  }, [onSelect, installments]);
 
   return (
     <View style={styles.cardContainer}>
-      <View style={styles.containerButton}>
-        <Pressable
-          style={installments === option ? styles.selected : styles.unselected}
-          onPress={handleSelect}
-        />
-      </View>
+      <RadioButton
+        isSelected={installments === option}
+        onPress={() => handleSelect(installments)}
+      />
 
-      <View style={styles.textContainer}>
-        <Text
-          style={styles.titleStyle}
-        >{`${installments} x de ${installmentAmount}`}</Text>
-      </View>
+      <InstallmentInfo
+        installments={installments}
+        installmentAmount={installmentAmount}
+      />
     </View>
   );
 };
+
+const InstallmentInfo = ({ installments, installmentAmount }) => (
+  <View style={styles.textContainer}>
+    <Text style={styles.titleStyle}>
+      {`${installments} x de ${installmentAmount}`}
+    </Text>
+  </View>
+);
 
 const styles = StyleSheet.create({
   cardContainer: {
@@ -41,11 +53,14 @@ const styles = StyleSheet.create({
     marginTop: verticalScale(8),
     marginHorizontal: horizontalScale(16),
     alignItems: "center",
-    //pra ios
-    shadowColor: 'gray',
-    shadowOffset: {width: horizontalScale(0), height: verticalScale(2)},
-    shadowOpacity: 0.5,
-    shadowRadius: moderateScale(2),
+    ...Platform.select({
+      ios: {
+        shadowColor: colors.grey700,
+        shadowOffset: { width: horizontalScale(0), height: verticalScale(2) },
+        shadowOpacity: 0.5,
+        shadowRadius: moderateScale(2),
+      },
+    }),
   },
   textContainer: {
     flexDirection: "column",
