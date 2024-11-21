@@ -59,8 +59,16 @@ Tecnologias utilizadas no desenvolvimento do projeto
 
 * **Mateus Rocha Baviera** - [Linkedin](https://www.linkedin.com/in/mateus-rocha-baviera/)
 
+## 🎥 Demonstração
+
+Android
+
+https://github.com/user-attachments/assets/1b3b463d-a98f-42f4-bed6-3834bcc644a8
+
+iOS
+
+https://github.com/user-attachments/assets/4b710263-5775-49fe-a63c-167ed8e55f38
+
 ## 🎁 Expressões de gratidão
 
-* Agradecimento a empresa Midway pela oportunidade 📢;
-
-## 🎥 Demonstração
+* Agradecimento especial a empresa Midway pela oportunidade 📢;
