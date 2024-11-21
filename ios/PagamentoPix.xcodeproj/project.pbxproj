@@ -13,11 +13,13 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-PagamentoPix-PagamentoPixTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-PagamentoPix-PagamentoPixTests.a */; };
+		796A0FA6DE5C4F418A936D37 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E89D3B37E985450D9A0C0EA8 /* Colors.xcassets */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		E5E5196D986E933B116DB551 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		EB89C00B2CEBFC18007D02D5 /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EB89C00A2CEBFC18007D02D5 /* Montserrat-Regular.ttf */; };
 		EBCAFAAF2CEF942C00052CC4 /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EBCAFAAD2CEF942C00052CC4 /* Montserrat-Bold.ttf */; };
 		EBCAFAB02CEF942C00052CC4 /* Montserrat-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EBCAFAAE2CEF942C00052CC4 /* Montserrat-SemiBold.ttf */; };
+		FE18E48FBBF64EA7962959AC /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 17CD2920CEA5470A955A055C /* BootSplash.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,6 +43,7 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = PagamentoPix/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = PagamentoPix/main.m; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = PagamentoPix/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		17CD2920CEA5470A955A055C /* BootSplash.storyboard */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = BootSplash.storyboard; path = PagamentoPix/BootSplash.storyboard; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-PagamentoPix-PagamentoPixTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PagamentoPix-PagamentoPixTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B4392A12AC88292D35C810B /* Pods-PagamentoPix.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PagamentoPix.debug.xcconfig"; path = "Target Support Files/Pods-PagamentoPix/Pods-PagamentoPix.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-PagamentoPix.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PagamentoPix.release.xcconfig"; path = "Target Support Files/Pods-PagamentoPix/Pods-PagamentoPix.release.xcconfig"; sourceTree = "<group>"; };
@@ -48,6 +51,7 @@
 		5DCACB8F33CDC322A6C60F78 /* libPods-PagamentoPix.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PagamentoPix.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = PagamentoPix/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-PagamentoPix-PagamentoPixTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PagamentoPix-PagamentoPixTests.release.xcconfig"; path = "Target Support Files/Pods-PagamentoPix-PagamentoPixTests/Pods-PagamentoPix-PagamentoPixTests.release.xcconfig"; sourceTree = "<group>"; };
+		E89D3B37E985450D9A0C0EA8 /* Colors.xcassets */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = folder.assetcatalog; name = Colors.xcassets; path = PagamentoPix/Colors.xcassets; sourceTree = "<group>"; };
 		EB89C00A2CEBFC18007D02D5 /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Regular.ttf"; sourceTree = "<group>"; };
 		EBCAFAAD2CEF942C00052CC4 /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Bold.ttf"; sourceTree = "<group>"; };
 		EBCAFAAE2CEF942C00052CC4 /* Montserrat-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-SemiBold.ttf"; sourceTree = "<group>"; };
@@ -102,6 +106,8 @@
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */,
+				17CD2920CEA5470A955A055C /* BootSplash.storyboard */,
+				E89D3B37E985450D9A0C0EA8 /* Colors.xcassets */,
 			);
 			name = PagamentoPix;
 			sourceTree = "<group>";
@@ -267,6 +273,8 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				E5E5196D986E933B116DB551 /* PrivacyInfo.xcprivacy in Resources */,
+				FE18E48FBBF64EA7962959AC /* BootSplash.storyboard in Resources */,
+				796A0FA6DE5C4F418A936D37 /* Colors.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -493,6 +501,7 @@
 				DEVELOPMENT_TEAM = DMFDDFPC36;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = PagamentoPix/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = PagamentoPix;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -521,6 +530,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = DMFDDFPC36;
 				INFOPLIST_FILE = PagamentoPix/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = PagamentoPix;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
