@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     marginTop: 80,
     elevation: 5,
     borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
+    borderTopRightRadius: 12,    
   },
   headerModalContainer: {
     flexDirection: "row",
@@ -94,6 +94,10 @@ const styles = StyleSheet.create({
   },
   textSubtitleModal: {
     fontSize: 16,
+  },
+  scrollView: {
+    flexGrow: 1,
+    paddingBottom: 5,
   },
 });
 

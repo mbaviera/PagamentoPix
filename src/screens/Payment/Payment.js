@@ -71,7 +71,7 @@ const Payment = ({ navigation }) => {
     fetchData();
   }, []);
 
-  //funcao de controle do click nos botoes radio da tela de menu
+  //funcao de select dos botoes radio da tela de menu
   const handleMenuSelection = useCallback((value, buttonDisabled) => {
     setControllerState((prev) => ({
       ...prev,
@@ -81,7 +81,7 @@ const Payment = ({ navigation }) => {
     setDataToInitialValue();
   }, []);
 
-  //funcao de controle do click nos botoes radio das parcelas de pagamento
+  //funcao de select dos botoes radio das parcelas de pagamento
   const handleInstallmentsSelection = useCallback(
     (value, buttonDisabled, item) => {
       setPaymentState((prev) => ({
@@ -100,7 +100,7 @@ const Payment = ({ navigation }) => {
     []
   );
 
-  //funcao de setar os controles para os valores iniciais
+  //funcao para definir os valores iniciais
   const setDataToInitialValue = () => {
     setPaymentState((prev) => ({
       ...prev,
@@ -140,8 +140,8 @@ const Payment = ({ navigation }) => {
       processPayment: true,
     }));
 
-    setTimeout(() => {
-      //timeout adicionado apenas para fins de exibicao da tela de loading
+    //timeout adicionado apenas para fins de exibicao da tela de loading
+    setTimeout(() => {      
       setControllerState((prev) => ({
         ...prev,
         processPayment: false,
@@ -235,7 +235,7 @@ const Payment = ({ navigation }) => {
             <CardMenu
               key={item.accountId}
               title={consts.saldoEmConta}
-              subtitle={`Disponível ${formatCurrency(item.balance)}`}
+              subtitle={`Disponível: ${formatCurrency(item.balance)}`}
               onSelect={(value) => handleMenuSelection(value, false)}
               option={controllerState.radioMenu}
             />
@@ -251,6 +251,7 @@ const Payment = ({ navigation }) => {
                 subtitle={item.cardNumber}
                 onSelect={(value) => handleMenuSelection(value, true)}
                 option={controllerState.radioMenu}
+                brand={item.brand}
               />
               {controllerState.radioMenu === item.name ? (
                 <>

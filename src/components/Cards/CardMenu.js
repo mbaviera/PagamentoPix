@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import colors from "../../constants/Colors";
+import { getBrandLogo } from "../../utils/CommonUtils";
 
-const CardMenu = ({ title, subtitle, onSelect, option }) => {
+const CardMenu = ({ title, subtitle, onSelect, option, brand }) => {
   const [userOption, setUserOption] = useState("Saldo em conta");
   const selectHandler = (value) => {
     onSelect(value);
@@ -19,7 +20,10 @@ const CardMenu = ({ title, subtitle, onSelect, option }) => {
       </View>
 
       <View style={styles.textContainer}>
-        <Text style={styles.titleStyle}>{`${title}`}</Text>
+        <View style={{ flexDirection: 'row' }}>
+          {brand && <Image source={getBrandLogo(brand)} style={styles.brandImage} resizeMode="contain"/>}
+          <Text style={styles.titleStyle}>{`${title}`}</Text>
+        </View>
         <Text style={styles.subtitleStyle}>{`${subtitle}`}</Text>
       </View>
     </View>
@@ -55,6 +59,7 @@ const styles = StyleSheet.create({
     fontFamily: "Montserrat-Regular",
     lineHeight: 20,
     backgroundColor: colors.white,
+    marginTop: 6
   },
   containerButton: {
     borderColor: colors.main700,
@@ -80,6 +85,11 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     borderWidth: 2,
     borderColor: colors.white,
+  },
+  brandImage: {
+    width: 40,
+    height: 20,
+    marginRight: 4
   },
 });
 
