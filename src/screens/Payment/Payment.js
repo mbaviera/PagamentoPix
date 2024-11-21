@@ -41,8 +41,8 @@ const Payment = () => {
   const [paymentState, setPaymentState] = useState({
     paymentAmount: paymentInitialData.amount, //valor total sem taxas
     receiverName: paymentInitialData.name, //nome de quem esta recebendo o pix
-    amountToPay: formatCurrency(paymentInitialData.amount),
-    totalAmountToPay: formatCurrency(paymentInitialData.amount),
+    amountToPay: formatCurrency(paymentInitialData.amount),//valor a pagar antes de finalizar
+    totalAmountToPay: formatCurrency(paymentInitialData.amount),//valor total a pagar
     cardFee: null, //taxa do cartao de credito
     cardFeeSelected: null, //taxa do cartao de credito
     installmentsFee: null, //taxa das parcelas
