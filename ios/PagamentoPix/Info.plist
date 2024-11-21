@@ -51,6 +51,8 @@
 	<array>
 		<string>AntDesign.ttf</string>
 		<string>Montserrat-Regular.ttf</string>
+		<string>Montserrat-Bold.ttf</string>
+		<string>Montserrat-SemiBold.ttf</string>
 		<string>Entypo.ttf</string>
 		<string>EvilIcons.ttf</string>
 		<string>Feather.ttf</string>

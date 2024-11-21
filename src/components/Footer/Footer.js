@@ -39,6 +39,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(16),
     paddingVertical: verticalScale(16),
     elevation: moderateScale(20),
+    //pra ios
+    shadowColor: 'gray',
+    shadowOffset: {width: horizontalScale(1), height: verticalScale(1)},
+    shadowOpacity: 0.5,
+    shadowRadius: moderateScale(1),
   },
   payButton: {
     paddingHorizontal: horizontalScale(16),

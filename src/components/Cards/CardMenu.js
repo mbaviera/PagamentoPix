@@ -40,6 +40,11 @@ const styles = StyleSheet.create({
     elevation: moderateScale(6),
     marginTop: verticalScale(8),
     alignItems: "center",
+    //pra ios
+    shadowColor: 'gray',
+    shadowOffset: {width: horizontalScale(0), height: verticalScale(2)},
+    shadowOpacity: 0.5,
+    shadowRadius: moderateScale(2),
   },
   textContainer: {
     flexDirection: "column",

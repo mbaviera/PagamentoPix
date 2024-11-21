@@ -1,19 +1,29 @@
 import React from "react";
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { horizontalScale, moderateScale, verticalScale } from "../../utils/Metrics";
+import {
+  horizontalScale,
+  moderateScale,
+  verticalScale,
+} from "../../utils/Metrics";
 import colors from "../../constants/Colors";
+import RoundedButton from "../../components/Button/RoundedButton";
 
 const PixSuccess = ({ route, navigation }) => {
   const { name, transferredValue, payedValue, paymentDate } = route.params;
   const handleClose = () => {
-    navigation.navigate('Payment', { resetData: true });
+    navigation.navigate("Payment", { resetData: true });
   };
 
   return (
     <View style={styles.container}>
       <Pressable style={styles.closeButton} onPress={handleClose}>
-        <Icon name="close" size={24} color="black" />
+        <RoundedButton
+          iconName={"close"}
+          iconSize={24}
+          iconColor={colors.main800}
+          onPress={handleClose}
+        />
       </Pressable>
 
       <Text style={styles.title}>Pix realizado com sucesso!</Text>
@@ -56,11 +66,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white,
     paddingHorizontal: horizontalScale(16),
-    paddingTop: verticalScale(20),
+    paddingTop: verticalScale(50),
     alignItems: "center",
   },
   closeButton: {
-    position: "absolute",
+    alignSelf: "flex-end",
     top: verticalScale(20),
     right: horizontalScale(16),
   },
@@ -88,6 +98,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.grey100,
     elevation: moderateScale(2),
     alignItems: "center",
+    //pra ios
+    shadowColor: 'gray',
+    shadowOffset: {width: horizontalScale(0), height: verticalScale(2)},
+    shadowOpacity: 0.5,
+    shadowRadius: moderateScale(2),
   },
   label: {
     fontSize: moderateScale(14),

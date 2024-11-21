@@ -16,6 +16,8 @@
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		E5E5196D986E933B116DB551 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		EB89C00B2CEBFC18007D02D5 /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EB89C00A2CEBFC18007D02D5 /* Montserrat-Regular.ttf */; };
+		EBCAFAAF2CEF942C00052CC4 /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EBCAFAAD2CEF942C00052CC4 /* Montserrat-Bold.ttf */; };
+		EBCAFAB02CEF942C00052CC4 /* Montserrat-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EBCAFAAE2CEF942C00052CC4 /* Montserrat-SemiBold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +49,8 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = PagamentoPix/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-PagamentoPix-PagamentoPixTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PagamentoPix-PagamentoPixTests.release.xcconfig"; path = "Target Support Files/Pods-PagamentoPix-PagamentoPixTests/Pods-PagamentoPix-PagamentoPixTests.release.xcconfig"; sourceTree = "<group>"; };
 		EB89C00A2CEBFC18007D02D5 /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Regular.ttf"; sourceTree = "<group>"; };
+		EBCAFAAD2CEF942C00052CC4 /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Bold.ttf"; sourceTree = "<group>"; };
+		EBCAFAAE2CEF942C00052CC4 /* Montserrat-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-SemiBold.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -157,6 +161,8 @@
 		EB89C0092CEBFBEA007D02D5 /* fonts */ = {
 			isa = PBXGroup;
 			children = (
+				EBCAFAAD2CEF942C00052CC4 /* Montserrat-Bold.ttf */,
+				EBCAFAAE2CEF942C00052CC4 /* Montserrat-SemiBold.ttf */,
 				EB89C00A2CEBFC18007D02D5 /* Montserrat-Regular.ttf */,
 			);
 			path = fonts;
@@ -255,6 +261,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EBCAFAAF2CEF942C00052CC4 /* Montserrat-Bold.ttf in Resources */,
+				EBCAFAB02CEF942C00052CC4 /* Montserrat-SemiBold.ttf in Resources */,
 				EB89C00B2CEBFC18007D02D5 /* Montserrat-Regular.ttf in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
