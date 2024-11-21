@@ -22,8 +22,11 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import PaymentModal from "../../components/Modal/PaymentModal";
 import Loading from "../../components/Loading/Loading";
 import consts from "../../constants/Consts";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
-const Payment = ({ navigation }) => {
+const Payment = () => {
+  const route = useRoute();
+  const navigation = useNavigation();
   const paymentInitialData = getPaymentInitialData();
   const formatCurrency = (value) => `R$ ${value?.toFixed(2)}`;
 
@@ -37,6 +40,7 @@ const Payment = ({ navigation }) => {
     cardFeeSelected: null, //taxa do cartao de credito
     installmentsFee: null, //taxa das parcelas
     installmentsFeeSelected: null, //taxa das parcelas
+    paymentDate: null, // data da tranferecia pix
   });
 
   //estados usados para controle de funcionalidades
@@ -74,6 +78,13 @@ const Payment = ({ navigation }) => {
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (route.params?.resetData) {
+      setDataToInitialValue();      
+      navigation.setParams({ resetData: null });// Reseta o parametro para evitar loops
+    }
+  }, [route.params?.resetData]);
 
   //funcao de select dos botoes radio da tela de menu
   const handleMenuSelection = useCallback((value, buttonDisabled) => {
@@ -126,6 +137,7 @@ const Payment = ({ navigation }) => {
 
   //funcao de controle do pagamento
   const handlePaymentProcess = () => {
+    const todayDate = getCurrentDate();
     setControllerState((prev) => ({
       ...prev,
       processPayment: true,
@@ -137,8 +149,22 @@ const Payment = ({ navigation }) => {
         ...prev,
         processPayment: false,
       }));
-      navigation.navigate("PixSuccess");
+      navigation.navigate("PixSuccess", {
+        name: paymentState.receiverName,
+        transferredValue: paymentState.paymentAmount,
+        payedValue: paymentState.totalAmountToPay,
+        paymentDate: todayDate,
+      });
     }, 1000);
+  };
+
+  const getCurrentDate = () => {
+    const today = new Date();
+    const day = String(today.getDate()).padStart(2, "0"); // Garantir 2 dígitos
+    const month = String(today.getMonth() + 1).padStart(2, "0"); // Meses começam em 0
+    const year = today.getFullYear();
+
+    return `${day}/${month}/${year}`;
   };
 
   //funcao para definir os valores iniciais
@@ -298,7 +324,9 @@ const Payment = ({ navigation }) => {
                         <Text>Taxa de parcelamento</Text>
                         <Text>
                           {paymentState.installmentsFeeSelected != null
-                            ? `R$ ${paymentState.installmentsFeeSelected.toFixed(2)}`
+                            ? `R$ ${paymentState.installmentsFeeSelected.toFixed(
+                                2
+                              )}`
                             : "-"}
                         </Text>
                       </View>

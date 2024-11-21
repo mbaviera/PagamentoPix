@@ -1,10 +1,11 @@
 import React from "react";
-import { StyleSheet, Text, View, Pressable, Image } from "react-native";
+import { StyleSheet, Text, View, Pressable } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 
-const PixSuccess = ({ navigation }) => {
+const PixSuccess = ({ route, navigation }) => {
+  const { name, transferredValue, payedValue, paymentDate } = route.params;
   const handleClose = () => {
-    navigation.goBack(); 
+    navigation.navigate('Payment', { resetData: true });
   };
 
   return (
@@ -20,29 +21,29 @@ const PixSuccess = ({ navigation }) => {
       </View>
 
       <View style={styles.infoContainer}>
-        <Text style={styles.label}>Para</Text>
-        <Text style={styles.receiver}>
-          Maria da Silva Maria da Silva Maria da Silva Maria da Silva
-        </Text>
-
         <View style={styles.row}>
           <View style={styles.column}>
-            <Text style={styles.label}>Valor Transferido</Text>
-            <Text style={styles.value}>R$ 100,00</Text>
+            <Text style={styles.label}>Para</Text>
+            <Text style={styles.receiver}>{name}</Text>
           </View>
 
           <View style={styles.column}>
             <Text style={styles.label}>Data</Text>
-            <Text style={styles.value}>06/12/2024</Text>
+            <Text style={styles.value}>{paymentDate}</Text>
           </View>
         </View>
 
-        {/* <View style={styles.row}>
+        <View style={styles.row}>
           <View style={styles.column}>
-            <Text style={styles.label}>Valor a pagar</Text>
-            <Text style={styles.value}>R$ 100,00</Text>
+            <Text style={styles.label}>Valor Transferido</Text>
+            <Text style={styles.value}>R$ {transferredValue.toFixed(2)}</Text>
           </View>
-        </View> */}
+
+          <View style={styles.column}>
+            <Text style={styles.label}>Valor Pago</Text>
+            <Text style={styles.value}>{payedValue}</Text>
+          </View>
+        </View>
       </View>
     </View>
   );
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     width: "100%",
-    padding: 16,
+    paddingVertical: 16,
     borderRadius: 8,
     backgroundColor: "#f9f9f9",
     elevation: 2,
