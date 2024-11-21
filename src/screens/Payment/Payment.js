@@ -35,7 +35,7 @@ const Payment = () => {
   const route = useRoute();
   const navigation = useNavigation();
   const paymentInitialData = getPaymentInitialData();
-  const formatCurrency = (value) => `R$ ${value?.toFixed(2)}`;
+  const formatCurrency = (value) => `R$ ${value?.toFixed(2).replace('.', ',')}`;
 
   //estados usados para pagamento
   const [paymentState, setPaymentState] = useState({
@@ -344,7 +344,7 @@ const Payment = () => {
                         title={consts.taxaCartao}
                         subtitle={
                           paymentState.cardFeeSelected != null
-                            ? `R$ ${paymentState.cardFeeSelected.toFixed(2)}`
+                            ? `R$ ${paymentState.cardFeeSelected.toFixed(2).replace('.', ',')}`
                             : "-"
                         }
                       />

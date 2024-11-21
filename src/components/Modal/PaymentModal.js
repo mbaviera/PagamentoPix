@@ -79,7 +79,7 @@ const PaymentModalBody = ({ paymentSimulationItems, onSelect, option }) => (
       <CardParcelas
         key={item.installments}
         installments={item.installments}
-        installmentAmount={item.installmentAmount?.toFixed(2)}
+        installmentAmount={item.installmentAmount?.toFixed(2).replace('.', ',')}
         onSelect={(value) => onSelect(value, false, item, item.fees)}
         option={option}
       />

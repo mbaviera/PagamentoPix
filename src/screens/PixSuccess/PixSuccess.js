@@ -43,7 +43,7 @@ const PixSuccess = ({ route, navigation }) => {
         <View style={styles.row}>
           <ResultRow
             title={consts.valorTransferido}
-            subtitle={`R$ ${transferredValue.toFixed(2)}`}
+            subtitle={`R$ ${transferredValue.toFixed(2).replace('.', ',')}`}
           />
           <ResultRow title={consts.valorPago} subtitle={payedValue} />
         </View>
