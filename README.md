@@ -63,11 +63,11 @@ Tecnologias utilizadas no desenvolvimento do projeto
 
 Android
 
-https://github.com/user-attachments/assets/1b3b463d-a98f-42f4-bed6-3834bcc644a8
+https://github.com/user-attachments/assets/b477ec66-c4bf-488d-a2e9-35d9395ae721
 
 iOS
 
-https://github.com/user-attachments/assets/4b710263-5775-49fe-a63c-167ed8e55f38
+https://github.com/user-attachments/assets/e4696989-da10-42d7-8047-ca2732419f6e
 
 ## 🎁 Expressões de gratidão
 
