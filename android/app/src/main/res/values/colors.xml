@@ -1,3 +1,4 @@
 <resources>
     <color name="bootsplash_background">#00726d</color>
+    <color name="status_bar_color">#00726d</color>
 </resources>
