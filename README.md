@@ -31,7 +31,10 @@ react-native run-android
 Instalar o aplicativo em dispositivos iOS:
 
 ```
-Abrir o terminal na pasta raiz da aplicação e em seguida acessar a pasta ios com o seguinte comando:
+Abrir o terminal na pasta raiz da aplicação e instalar os módulos com o seguinte comando:
+npm install
+
+Acessar a pasta ios com o seguinte comando:
 cd ios
 
 Instalar os módulos pods com o seguinte comando:
@@ -57,10 +60,6 @@ Tecnologias utilizadas no desenvolvimento do projeto
 * Git - Sistema de controle de versão utilizado
 * GitHub - Repositorio utilizado para armezenamento
 
-## ✒️ Autores
-
-* **Mateus Rocha Baviera** - [Linkedin](https://www.linkedin.com/in/mateus-rocha-baviera/)
-
 ## 🎥 Demonstração
 
 Android
@@ -70,6 +69,10 @@ https://github.com/user-attachments/assets/b477ec66-c4bf-488d-a2e9-35d9395ae721
 iOS
 
 https://github.com/user-attachments/assets/e4696989-da10-42d7-8047-ca2732419f6e
+
+## ✒️ Autores
+
+* **Mateus Rocha Baviera** - [Linkedin](https://www.linkedin.com/in/mateus-rocha-baviera/)
 
 ## 🎁 Expressões de gratidão
 
