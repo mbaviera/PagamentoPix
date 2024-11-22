@@ -1,6 +1,6 @@
-# Título do projeto
+# Descrição do projeto
 
-Case técnico de desenvolvimento de uma interface de usuário para pagamento PIX utilizando React Native para a empresa Midway.
+Case técnico de desenvolvimento de uma interface de usuário para pagamento PIX utilizando React Native, como parte do processo seletivo para a empresa Midway.
 
 ### 📋 Pré-requisitos
 
@@ -53,11 +53,11 @@ Opção 2: Pelo Xcode
 
 Tecnologias utilizadas no desenvolvimento do projeto
 
-* React Native - O framework de desenvolvimento
-* Javascript - Linguagem de progamação utilizada
+* React Native - Framework de desenvolvimento
+* Javascript - Linguagem de progamação
 * react-navigation - Lib utilizada para navegação entre telas
 * react-native-bootsplash - Lib utilizada para criação de splash screen
-* Git - Sistema de controle de versão utilizado
+* Git - Sistema de controle de versão
 * GitHub - Repositorio utilizado para armezenamento
 
 ## 🎥 Demonstração
