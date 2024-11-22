@@ -2,7 +2,6 @@ import React from "react";
 import {
   Modal,
   SafeAreaView,
-  StyleSheet,
   Text,
   ScrollView,
   View,
@@ -11,12 +10,8 @@ import colors from "../../style/Colors";
 import CardParcelas from "../Cards/CardParcelas";
 import Footer from "../Footer/Footer";
 import RoundedButton from "../Button/RoundedButton";
-import {
-  horizontalScale,
-  moderateScale,
-  verticalScale,
-} from "../../utils/Metrics";
 import consts from "../../constants/Consts";
+import styles from "../../style";
 
 const PaymentModal = ({
   visible,
@@ -35,7 +30,7 @@ const PaymentModal = ({
       visible={visible}
       onRequestClose={onClose}
     >
-      <SafeAreaView style={styles.safeContainerModal}>
+      <SafeAreaView style={styles.safeModalContainer}>
         <PaymentModalHeader onClose={onClose} />
         <PaymentModalBody
           paymentSimulationItems={paymentSimulationItems}
@@ -54,7 +49,7 @@ const PaymentModal = ({
 
 const PaymentModalHeader = ({ onClose }) => (
   <View style={styles.headerModalContainer}>
-    <Text style={styles.textTitleModal}>{consts.parcelasPagamento}</Text>
+    <Text style={styles.modalTitle}>{consts.parcelasPagamento}</Text>
     <RoundedButton
       iconName="close"
       iconSize={24}
@@ -86,40 +81,5 @@ const PaymentModalBody = ({ paymentSimulationItems, onSelect, option }) => (
     ))}
   </ScrollView>
 );
-
-const styles = StyleSheet.create({
-  safeContainerModal: {
-    flex: 1,
-    backgroundColor: colors.white,
-    marginTop: verticalScale(80),
-    elevation: moderateScale(5),
-    borderTopLeftRadius: horizontalScale(12),
-    borderTopRightRadius: horizontalScale(12),
-  },
-  headerModalContainer: {
-    flexDirection: "row",
-    paddingHorizontal: horizontalScale(16),
-    justifyContent: "space-between",
-    paddingTop: verticalScale(8),
-    paddingBottom: verticalScale(16),
-    marginTop: verticalScale(25),
-  },
-  textTitleModal: {
-    fontSize: moderateScale(24),
-  },
-  subTitleModalContainer: {
-    flexDirection: "row",
-    paddingHorizontal: horizontalScale(16),
-    justifyContent: "space-between",
-    paddingBottom: verticalScale(16),
-  },
-  textSubtitleModal: {
-    fontSize: moderateScale(16),
-  },
-  scrollView: {
-    flexGrow: 1,
-    paddingBottom: verticalScale(5),
-  },
-});
 
 export default PaymentModal;

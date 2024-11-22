@@ -1,8 +1,7 @@
 import React from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
-import colors from "../../style/Colors";
-import { horizontalScale, moderateScale, verticalScale } from "../../utils/Metrics";
+import styles from "../../style";
 
 const RoundButton = ({ iconName, iconSize, iconColor, onPress }) => {
   return (
@@ -11,16 +10,5 @@ const RoundButton = ({ iconName, iconSize, iconColor, onPress }) => {
     </TouchableOpacity>
   );
 }
-
-const styles = StyleSheet.create({
-  buttonContainer: {
-    width: horizontalScale(32),
-    height: verticalScale(32),
-    borderRadius: moderateScale(145),
-    backgroundColor: colors.main100,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },  
-});
 
 export default RoundButton;

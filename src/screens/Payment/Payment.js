@@ -1,6 +1,5 @@
 import {
   SafeAreaView,
-  StyleSheet,
   View,
   Text,
   ScrollView,
@@ -23,13 +22,9 @@ import PaymentModal from "../../components/Modal/PaymentModal";
 import Loading from "../../components/Loading/Loading";
 import consts from "../../constants/Consts";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import {
-  horizontalScale,
-  moderateScale,
-  verticalScale,
-} from "../../utils/Metrics";
 import InfoRow from "../../components/Text/InfoRow";
 import Separator from "../../components/Separator/Separator";
+import styles from "../../style";
 
 const Payment = () => {
   const route = useRoute();
@@ -282,18 +277,18 @@ const Payment = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.paymentContainer}>
       {renderInstallmentsModal()}
       <Header titleHeader={consts.transferenciaPix} />
-      <View style={styles.textContainer}>
+      <View style={styles.paymentTextContainer}>
         <Text style={styles.paymentSubtitle}>
           {consts.escolhaFormaPagamento}
         </Text>
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollView} bounces={false}>
-        <View style={styles.textContainer}>
-          <Text style={styles.textConta}>{consts.contaMidway}</Text>
+        <View style={styles.paymentTextContainer}>
+          <Text style={styles.accountTitle}>{consts.contaMidway}</Text>
           {userAccount?.map((item) => (
             <CardMenu
               key={item.accountId}
@@ -305,8 +300,8 @@ const Payment = () => {
           ))}
         </View>
 
-        <View style={styles.textContainer}>
-          <Text style={styles.textCartoes}>{consts.cartoesCredito}</Text>
+        <View style={styles.paymentTextContainer}>
+          <Text style={styles.creditCardsTitle}>{consts.cartoesCredito}</Text>
           {userCards?.map((item) => (
             <View key={item.name}>
               <CardMenu
@@ -319,11 +314,11 @@ const Payment = () => {
               {controllerState.radioMenu === item.name ? (
                 <>
                   <TouchableOpacity
-                    style={styles.parcelasContainer}
+                    style={styles.paymentInstallmentsContainer}
                     onPress={() => openPaymentModal(true)}
                   >
                     <Text
-                      style={styles.textParcelas}
+                      style={styles.chooseInsallmentsTitle}
                     >{`${controllerState.cardInstallments}`}</Text>
                     <Icon
                       name="chevron-right"
@@ -332,7 +327,7 @@ const Payment = () => {
                     />
                   </TouchableOpacity>
                   {controllerState.showCheckCard ? (
-                    <View style={styles.checkContainer}>
+                    <View style={styles.paymentCheckContainer}>
                       <InfoRow
                         title={consts.valorTransferir}
                         subtitle={`${formatCurrency(
@@ -383,76 +378,5 @@ const Payment = () => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.grey100,
-  },
-  textContainer: {
-    paddingHorizontal: horizontalScale(16),
-    paddingTop: verticalScale(8),
-    paddingBottom: verticalScale(16),
-    backgroundColor: colors.grey100,
-  },
-  paymentSubtitle: {
-    color: colors.black,
-    fontSize: moderateScale(16),
-    fontFamily: "Montserrat-SemiBold",
-    lineHeight: verticalScale(20),
-    backgroundColor: colors.grey100,
-  },
-  textConta: {
-    color: colors.lightBlack,
-    fontSize: moderateScale(16),
-    fontFamily: "Montserrat-SemiBold",
-    lineHeight: verticalScale(20),
-    backgroundColor: colors.grey100,
-    paddingVertical: verticalScale(12),
-  },
-  textCartoes: {
-    color: colors.lightBlack,
-    fontSize: moderateScale(16),
-    fontFamily: "Montserrat-SemiBold",
-    lineHeight: verticalScale(20),
-    backgroundColor: colors.grey100,
-    paddingVertical: verticalScale(12),
-    textAlign: "center",
-  },
-  parcelasContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingHorizontal: horizontalScale(16),
-    paddingVertical: verticalScale(12),
-    backgroundColor: colors.white,
-    marginVertical: verticalScale(16),
-    borderRadius: moderateScale(8),
-  },
-  checkContainer: {
-    paddingHorizontal: horizontalScale(16),
-    paddingVertical: verticalScale(12),
-    backgroundColor: colors.white,
-  },
-  textParcelas: {
-    color: colors.main700,
-    fontSize: moderateScale(16),
-    fontFamily: "Montserrat-SemiBold",
-    lineHeight: verticalScale(20),
-  },
-  scrollView: {
-    flexGrow: 1,
-    paddingBottom: verticalScale(5),
-  },
-  errorContainer: {
-    flex: 1,
-    justifyContent: "center",
-  },
-  errorMessage: {
-    color: colors.main700,
-    fontSize: moderateScale(16),
-    fontFamily: "Montserrat-SemiBold",
-    textAlign: "center",
-  },
-});
 
 export default Payment;
